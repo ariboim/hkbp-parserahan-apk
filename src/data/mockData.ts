@@ -1,0 +1,842 @@
+import {
+  AppNotification,
+  BibleStory,
+  ChurchLocation,
+  Devotional,
+  HymnSong,
+  QuizQuestion,
+  TimelinePost,
+  TvVideo,
+  UserProfile,
+} from '../types';
+
+export const ASSETS = {
+  storyAdamHawa: '/src/assets/images/story_adam_hawa_1795591253950.jpg',
+  storyGenesisThree: '/src/assets/images/story_genesis_three_1795591254181.jpg',
+  storyNoahArk: '/src/assets/images/story_noah_ark_1795591255159.jpg',
+  hkbpTvStudio: '/src/assets/images/hkbp_tv_studio_1795591256014.jpg',
+  churchParserahanHero: '/src/assets/images/church_parserahan_hero_1795591255659.jpg',
+};
+
+export const DEMO_PROFILES: Record<'jemaat' | 'admin', UserProfile> = {
+  jemaat: {
+    name: 'Mangaraja Simanjuntak',
+    role: 'Jemaat',
+    email: 'mangaraja.simanjuntak@hkbpparserahan.org',
+    memberId: 'HKBP-PSR-2026-0148',
+    weyk: 'Wijk parserahan HKBP Jatisampurna',
+    status: 'Aktif',
+    verified: true,
+    initials: 'MS',
+  },
+  admin: {
+    name: 'St. Hotman Siregar',
+    role: 'Pengurus / Admin',
+    email: 'sekretariat@hkbpparserahan.org',
+    memberId: 'HKBP-PSR-ADM-0012',
+    weyk: 'Parhalado · HKBP Parserahan',
+    status: 'Aktif',
+    verified: true,
+    initials: 'HS',
+  },
+};
+
+export const TODAY_DEVOTIONAL: Devotional = {
+  id: 'ren-2026-11-25',
+  dateLabel: 'Rabu, 25 November 2026',
+  isoDate: '2026-11-25',
+  readingRef: 'Harian: Nehemia 4 : 8',
+  batakRef: 'Nehemia 4 : 8 (Bibel Batak Toba)',
+  title: 'Marsada ni Roha Mamungka dohot Manjaga Ulaon ni Tuhan',
+  quote:
+    'Mereka semua bersepakat untuk memerangi Yerusalem dan mengadakan kekacauan di sana. Tetapi kami berdoa kepada Allah kami, dan mengadakan penjagaan terhadap mereka siang dan malam.',
+  batakQuote:
+    'Jadi martuptup ma nasida saluhutna naeng ro marporang dompak Jerusalem jala naeng manggaori huta i. Alai martangiang do anggo hami tu Debatanami, jala hupajongjong hami angka parjaga dompak nasida arian dohot borngin.',
+  hymnRef: 'BE. 790 : 1 - 2',
+  hymnId: 'be-790',
+  reflection: [
+    'Dalam membangun kembali tembok Yerusalem, Nehemia dan umat Israel tidak hanya menghadapi kelelahan fisik, tetapi juga ancaman dan cemoohan dari pihak luar. Namun perhatikan urutan respons iman mereka: pertama-tama berdoa kepada Allah, lalu bertindak dengan penuh tanggung jawab menempatkan penjagaan siang dan malam.',
+    'Sebagai jemaat HKBP Parserahan, kita pun dipanggil untuk hidup dalam keseimbangan antara tangiang (doa) dan ulaon (karya nyata). Tantangan keluarga, pekerjaan, maupun pelayanan gereja tidak seharusnya mematahkan semangat kita ketika kita bersatu hati.',
+    'Hari ini, bawalah setiap rencana dan bebanmu dalam doa kepada Tuhan Yesus, sambil tetap setia menjaga ketekunan kerja dan kasih persaudaraan di tengah weyk dan keluarga.',
+  ],
+  prayer:
+    'Ale Tuhan Debata Amanami, mauliate ma di hataM sadari on. Lehon ma di hami roha na marsada jala haporseaon na togu laho mangulahon lomo ni rohaM di bagasan ngolunami ganup ari. Amen.',
+};
+
+export const ARCHIVE_DEVOTIONALS: Devotional[] = [
+  TODAY_DEVOTIONAL,
+  {
+    id: 'ren-2026-11-24',
+    dateLabel: 'Selasa, 24 November 2026',
+    isoDate: '2026-11-24',
+    readingRef: 'Harian: Psalmen 121 : 1 - 2',
+    batakRef: 'Psalmen 121 : 1 - 2',
+    title: 'Sian Jahowa do Ro Pangurupion',
+    quote:
+      'Aku melayangkan mataku ke gunung-gunung; dari manakah akan datang pertolonganku? Pertolonganku ialah dari TUHAN, yang menjadikan langit dan bumi.',
+    batakQuote:
+      'Hubereng do tu angka dolok: Sian dia ma ulaning ro pangurupion tu ahu? Sian Jahowa Sitompa langit dohot tano on do ro pangurupion tu ahu.',
+    hymnRef: 'BE. 28 : 1 - 2',
+    hymnId: 'be-28',
+    reflection: [
+      'Pemazmur mengingatkan bahwa sumber pertolongan sejati bukanlah kekuatan manusia, melainkan Tuhan Sang Pencipta langit dan bumi.',
+      'Di tengah perjalanan hidup yang menanjak bagai mendaki bukit, keyakinan bahwa Tuhan menyertai setiap langkah memberi ketenangan batin.',
+    ],
+    prayer:
+      'Ale Tuhan Sitompa langit dohot tano, sai ramoti ma hami di sude pardalanan ni ngolunami. Amen.',
+  },
+  {
+    id: 'ren-2026-11-23',
+    dateLabel: 'Senin, 23 November 2026',
+    isoDate: '2026-11-23',
+    readingRef: 'Harian: Johannes 15 : 5',
+    batakRef: 'Johannes 15 : 5',
+    title: 'Tuhan Jesus do Hau Anggur na Tutu',
+    quote:
+      'Akulah pokok anggur dan kamulah ranting-rantingnya. Barangsiapa tinggal di dalam Aku dan Aku di dalam dia, ia berbuah banyak.',
+    batakQuote:
+      'Ahu do hau anggur i, hamu do angka rantingna! Na mian di bagasan Ahu jala Ahu di bagasan ibana, i ma na marparbuehon godang.',
+    hymnRef: 'BE. 167 : 1 - 2',
+    hymnId: 'be-167',
+    reflection: [
+      'Ranting tidak dapat hidup dan berbuah jika terputus dari pokoknya. Demikian pula hidup orang percaya bertumbuh oleh persekutuan yang terus-menerus dengan Kristus.',
+    ],
+    prayer:
+      'Tuhan Jesus, paian ma hami di bagasan holongMu asa marparbue ngolunami tu hasangaponMu. Amen.',
+  },
+];
+
+export const BIBLE_STORIES: BibleStory[] = [
+  {
+    id: 'story-adam-hawa',
+    passage: '1 MUSA 1-2',
+    title: 'SI ADAM DOHOT SI HAOA',
+    batakExcerpt:
+      'Ditompa Debata ma langit dohot tano on, dipajongjong ma porlak Eden jala ditompa ma si Adam dohot si Haoa asa mangingani jala mangaradoti na tinompaNa.',
+    imageUrl: ASSETS.storyAdamHawa,
+    fallbackGradient: 'from-emerald-700 to-teal-900',
+    paragraphsBatak: [
+      'Di mula ni mulana ditompa Debata ma langit dohot tano on. Saluhutna i mansai denggan do ditompa marhite hataNa: hatiuron, aek, tano na mahiang, suansuanan, mataniari, bulan, bintang, angka dengke di laut dohot pidong di awangawang.',
+      'Dung i ditompa Debata ma jolma tudos tu rupaNa sandiri. Dibuat Jahowa Debata ma orbuk ni tano i gabe daging ni si Adam, jala diullushon ma hosa hangoluan tu bagasan igungna, gabe jolma na mangolu ma ibana.',
+      'Dipahundul Debata ma si Adam di porlak Eden na uli situtu. Dung i didok Debata ma: "Ndang denggan sasada jolma i; hubahen ma di ibana pangurupi na tama." Dibahen Debata ma tarpodom si Adam, dibuat ma sada rusukna jala ditompa ma si Haoa gabe dongan saripena.',
+    ],
+    paragraphsIndo: [
+      'Pada mulanya Allah menciptakan langit dan bumi dengan firman-Nya yang penuh kuasa. Segala sesuatu diciptakan dengan baik dan teratur.',
+      'Kemudian Allah membentuk Adam dari debu tanah dan menghembuskan nafas hidup ke dalam hidungnya. Allah menempatkan Adam di Taman Eden untuk mengusahakan dan memeliharanya.',
+      'Allah melihat tidak baik kalau manusia seorang diri saja, lalu Ia menjadikan Hawa sebagai penolong yang sepadan untuk hidup bersama dalam kasih dan ketaatan kepada Tuhan.',
+    ],
+    moralLesson:
+      'Debata manompa jolma di bagasan holong jala mangalehon tanggungjawab laho mangaradoti saluhut na tinompaNa.',
+  },
+  {
+    id: 'story-genesis-3',
+    passage: '1 Musa 3',
+    title: 'MADABU TU BAGASAN DOSA',
+    batakExcerpt:
+      'Ro ma ulok mangelaela si Haoa di porlak Eden. Dung dipangan nasida parbue ni hau na niambatan i, madabu ma jolma i tu dosa, alai diparbagabaga Debata do Sipalua.',
+    imageUrl: ASSETS.storyGenesisThree,
+    fallbackGradient: 'from-amber-700 to-stone-900',
+    paragraphsBatak: [
+      'Alai umbisuk do ulok sian nasa binatang na di ladang naung tinompa ni Jahowa Debata. Didok ulok i ma tu parompuan i: "Ai tutu do didok Debata: Ndang jadi panganonmuna sian saluhut hau na di porlak on?"',
+      'Dipangan si Haoa ma parbue ni hau parbinotoan ni na denggan dohot na roa i, jala dilehon ma dohot tu sinondukna si Adam, gabe dipangan nasida ma.',
+      'Dung i mabiar ma nasida maradophon Jahowa Debata jala martabuni di holangkolang ni angka hau. Alai nang pe songon i, dipaboa Debata do bagabaga haluaon (1 Musa 3:15) taringot tu pomparan ni parompuan na laho mangalessem ulu ni ulok i.',
+    ],
+    paragraphsIndo: [
+      'Ular membujuk Hawa untuk melanggar perintah Allah di Taman Eden, sehingga Adam dan Hawa memakan buah dari pohon yang dilarang Tuhan.',
+      'Akibat ketidaktaatan itu, manusia jatuh ke dalam dosa dan kehilangan kemuliaan Eden. Namun Allah yang penuh rahmat tetap mencari mereka dan memberikan janji keselamatan melalui keturunan perempuan (Protoevangelium).',
+    ],
+    moralLesson:
+      'Pangoloion tu hata ni Debata mangalehon hangoluan; jala di bagasan asi ni rohaNa, tongtong do dibagabagahon Debata haluaon di bagasan Kristus.',
+  },
+  {
+    id: 'story-noah',
+    passage: '1 Musa 6-9',
+    title: 'PARAHU NI SI NOAK',
+    batakExcerpt:
+      'Ala ni hajahaton ni jolma di tano on, dipabotohon Debata ma tu si Noak asa mambahen parahu na bolon, jala dilehon do halibutongan gabe tanda ni padanNa.',
+    imageUrl: ASSETS.storyNoahArk,
+    fallbackGradient: 'from-blue-700 to-sky-900',
+    paragraphsBatak: [
+      'Di tingki na gok hajahaton di tano on, dapotan asi ni roha do si Noak di adopan ni Jahowa, ala halak na tigor roha ibana jala na so hasurahan.',
+      'Disuru Debata ma si Noak mambahen parahu sian hau gofer. Bongot ma si Noak dohot keluargana, ro di angka binatang sian ganup ragamna tu bagasan parahu i andorang so ro aek na sumar i.',
+      'Dung sun aek na sumar i jala mahiang tano on, dipajongjong Debata ma halibutongan di ombun gabe tanda ni padan hasintonganNa tu sandok tano on.',
+    ],
+    paragraphsIndo: [
+      'Nuh adalah seorang yang benar dan hidup bergaul dengan Allah di tengah zaman yang penuh kejahatan. Tuhan memerintahkan Nuh membangun bahtera besar untuk menyelamatkan keluarganya dan makhluk hidup.',
+      'Setelah air bah surut, Allah menaruh busur pelangi di awan sebagai tanda perjanjian kekal-Nya kepada bumi.',
+    ],
+    moralLesson:
+      'Hasatiaon mangulahon hata ni Debata nang pe diida portibi on songon na so masuk akal, tongtong do mamboan haluaon.',
+  },
+  {
+    id: 'story-daud-goliat',
+    passage: '1 Samuel 17',
+    title: 'SI DAUD DOHOT SI GOLIAT',
+    batakExcerpt:
+      'Ndang marhite podang manang hujur, alai marhite goar ni Jahowa Zebaot do dipatunduk si Daud halak Pilistim na gogo i.',
+    imageUrl: '',
+    fallbackGradient: 'from-indigo-700 to-slate-900',
+    paragraphsBatak: [
+      'Ro ma si Goliat sian huta Gat mangaleai parangan ni Israel ganup ari. Alai ro ma si Daud, parmahan na poso i, mandok: "Hape ianggo ahu ro mandapothon ho marhite goar ni Jahowa Zebaot."',
+      'Dibuat si Daud ma lima batu na lio sian sunge, diampehon ma sada tu ambalangna, jala ditimbung ma pardompahan ni si Goliat sahat tu na mate ibana.',
+    ],
+    paragraphsIndo: [
+      'Daud yang masih muda maju menghadapi raksasa Goliat bukan dengan baju zirah berat, melainkan dengan iman kepada Tuhan semesta alam.',
+      'Satu batu dari umban Daud cukup merobohkan Goliat karena Tuhan sendiri yang berperang bagi umat-Nya.',
+    ],
+    moralLesson:
+      'Unang mabiar mangadopi hagogoon ni portibi on, ai umbalga do huaso ni Debata na donganan hita.',
+  },
+];
+
+export const HYMN_SONGS: HymnSong[] = [
+  {
+    id: 'be-167',
+    book: 'Buku Ende',
+    code: 'BE 167',
+    title: 'DIJANGKON JESUS DO PARDOSA',
+    subtitle: 'Haluaon dohot Asi ni Roha ni Tuhan Jesus',
+    keySignature: 'Do = F',
+    tempoBpm: 88,
+    timeSignature: '3/4',
+    composer: 'Erdmann Neumeister / Musik HKBP',
+    playCount: 1420,
+    lastPlayed: 'Hari ini · 07:15',
+    verses: [
+      {
+        number: 1,
+        lines: [
+          'Dijangkon Jesus do pardosa, na ro tu Ibana sude.',
+          'Ndang ditulakkon manang ise, asal ma porsea tutu.',
+          'Haleluya, pujion ma Tuhanta Jesus Kristus i!',
+          'Haleluya, na mangalehon hangoluan salelengna i.',
+        ],
+      },
+      {
+        number: 2,
+        lines: [
+          'Sai ro ma ho ale dongan, na loja jala na sorat.',
+          'Tu Jesus ma pasahat arsak, Ibana do na mangapuli.',
+          'Haleluya, pujion ma Tuhanta Jesus Kristus i!',
+          'Haleluya, na mangalehon hangoluan salelengna i.',
+        ],
+      },
+      {
+        number: 3,
+        lines: [
+          'Malua do tondinta i, sian dosa nang hamatean.',
+          'Marhite mudar ni Jesus, na durus di Golgata i.',
+          'Haleluya, pujion ma Tuhanta Jesus Kristus i!',
+          'Haleluya, na mangalehon hangoluan salelengna i.',
+        ],
+      },
+    ],
+    notation: [
+      'Do = F | 3/4 | Moderato',
+      '5 | 1 . 2 | 3 . 1 | 4 . 3 | 2 . 5 |',
+      '3 . 4 | 5 . 3 | 2 . 1 | 2 . 0 |',
+      '5 | 1 . 2 | 3 . 5 | 6 . 5 | 4 . 3 |',
+      '2 . 3 | 4 . 2 | 1 . 7< | 1 . 0 ||',
+    ],
+    melodyFreqs: [261.63, 349.23, 392.0, 440.0, 349.23, 466.16, 440.0, 392.0, 440.0, 466.16, 523.25, 440.0, 392.0, 349.23, 392.0, 349.23],
+  },
+  {
+    id: 'be-28',
+    book: 'Buku Ende',
+    code: 'BE 28',
+    title: 'HATA NI JAHOWA',
+    subtitle: 'Ende Pujipujian tu Hata ni Debata',
+    keySignature: 'Do = G',
+    tempoBpm: 94,
+    timeSignature: '4/4',
+    composer: 'J. Neander / Tradisi Gerejawi HKBP',
+    playCount: 1185,
+    lastPlayed: 'Kemarin · 20:40',
+    verses: [
+      {
+        number: 1,
+        lines: [
+          'Hata ni Jahowa do na hot salelengna i,',
+          'Ndang tarbahen muba i nang pe portibi on mago.',
+          'Tung na sintong do hataNa, sai mangolu do i,',
+          'Mamboan dame tu roha ni angka na porsea i.',
+        ],
+      },
+      {
+        number: 2,
+        lines: [
+          'O Tuhan pargogoi hami mangulahon hataMi,',
+          'Asa gabe sulu hami di tonga ni portibi on.',
+          'DameMi ma mangaramoti saluhut ruasMu on,',
+          'Ro di ujung ni ngolunami sahat tu surgo i.',
+        ],
+      },
+    ],
+    notation: [
+      'Do = G | 4/4 | Maestoso',
+      '1 | 3 5 5 6 | 5 3 1 2 | 3 4 3 2 | 1 . . 0 |',
+      '5 | 6 5 4 3 | 2 3 4 2 | 3 5 4 2 | 1 . . 0 ||',
+    ],
+    melodyFreqs: [392.0, 493.88, 587.33, 587.33, 659.25, 587.33, 493.88, 392.0, 440.0, 493.88, 523.25, 493.88, 440.0, 392.0],
+  },
+  {
+    id: 'bn-1',
+    book: 'Buku Nyanyian',
+    code: 'BN 1',
+    title: 'HAI BANGKITLAH JIWAKU',
+    subtitle: '1 Hai Bangkitlah Jiwaku — Nyanyian Pagi & Pengudusan',
+    keySignature: 'Do = Es',
+    tempoBpm: 92,
+    timeSignature: '4/4',
+    composer: 'Buku Nyanyian HKBP',
+    playCount: 980,
+    lastPlayed: 'Kemarin · 06:10',
+    verses: [
+      {
+        number: 1,
+        lines: [
+          'Hai bangkitlah jiwaku, sambutlah pagi yang mulia,',
+          'Puji Tuhan Penciptamu dengan syukur dan sukacita.',
+          'Anugerah-Nya baru tiap pagi, rahmat-Nya tak berkesudahan,',
+          'Sembahlah Dia dalam roh dan kebenaran.',
+        ],
+      },
+      {
+        number: 2,
+        lines: [
+          'Bimbinglah langkah kami di sepanjang hari ini,',
+          'Jauhkan dari godaan, teguhkan hati yang setia.',
+          'Biarlah hidup kami menjadi kesaksian kasih-Mu,',
+          'Memuliakan nama Yesus Juruselamat dunia.',
+        ],
+      },
+    ],
+    notation: [
+      'Do = Es | 4/4 | Andante Con Moto',
+      '1 2 | 3 . 4 5 | 5 4 3 2 | 3 . 1 2 | 1 . . 0 |',
+      '3 4 | 5 . 6 5 | 4 3 2 1 | 2 3 4 2 | 1 . . 0 ||',
+    ],
+    melodyFreqs: [311.13, 349.23, 392.0, 415.3, 466.16, 466.16, 415.3, 392.0, 349.23, 392.0, 311.13, 349.23, 311.13],
+  },
+  {
+    id: 'be-790',
+    book: 'Buku Ende',
+    code: 'BE 790',
+    title: 'MARLAS NI ROHA HITA ON',
+    subtitle: 'Rujukan Renungan Hari Ini · Halalas ni Roha',
+    keySignature: 'Do = D',
+    tempoBpm: 100,
+    timeSignature: '4/4',
+    composer: 'Suplemen Buku Ende HKBP',
+    playCount: 890,
+    lastPlayed: '2 hari lalu',
+    verses: [
+      {
+        number: 1,
+        lines: [
+          'Marlas ni roha hita on di bagasan Tuhan i,',
+          'Ai Ibana do Siparmahan na denggan roha i.',
+          'Nang pe ro angka galumbang di parngoluon on,',
+          'Ndang tarbahen lilu hita di bagasan tanganNa i.',
+        ],
+      },
+      {
+        number: 2,
+        lines: [
+          'Marsada roha hita on mangulahon ulaonNa,',
+          'Di bagasan tangiang nang holong na marsihaholongan.',
+          'Puji ma goar ni Tuhan na mandongani hita,',
+          'Saleleng ni lelengna, Amen, Haleluya!',
+        ],
+      },
+    ],
+    notation: [
+      'Do = D | 4/4 | Allegro Moderato',
+      '5< | 1 1 2 3 | 5 5 3 1 | 4 4 3 2 | 1 . . 0 |',
+      '5< | 1 2 3 4 | 5 6 5 3 | 2 3 2 7< | 1 . . 0 ||',
+    ],
+    melodyFreqs: [293.66, 329.63, 369.99, 440.0, 440.0, 369.99, 293.66, 392.0, 392.0, 369.99, 329.63, 293.66],
+  },
+  {
+    id: 'kj-64',
+    book: 'Kidung Jemaat',
+    code: 'KJ 64',
+    title: 'BILA KULIHAT BINTANG GEMERLAPAN',
+    subtitle: 'Bagaimana Besar Engkau (How Great Thou Art)',
+    keySignature: 'Do = Bes',
+    tempoBpm: 84,
+    timeSignature: '4/4',
+    composer: 'Carl Boberg / Yamuger',
+    playCount: 1050,
+    verses: [
+      {
+        number: 1,
+        lines: [
+          'Bila kulihat bintang gemerlapan dan bunyi guruh riuh kudengar,',
+          'Ya Tuhanku, tak putus aku heran melihat ciptaan-Mu yang besar.',
+          'Maka jiwaku pun memuji-Mu: "Sungguh besar Kau, Allahku!"',
+          'Maka jiwaku pun memuji-Mu: "Sungguh besar Kau, Allahku!"',
+        ],
+      },
+      {
+        number: 2,
+        lines: [
+          'Ya Tuhanku, pabila kurenungkan pemberian-Mu dalam Penebus,',
+          'Kutertegun: bagiku dicurahkan oleh Putra-Mu darah-Nya kudus.',
+          'Maka jiwaku pun memuji-Mu: "Sungguh besar Kau, Allahku!"',
+        ],
+      },
+    ],
+    notation: [
+      'Do = Bes | 4/4 | Adagio',
+      '5< 5< 5< | 3< . 5< 5< 5< | 6< 6< . 4< 6< 6< |',
+      '5< . 5< 5< 5< | 1 . 3 2 1 | 7< 1 . 5< 5< ||',
+    ],
+    melodyFreqs: [349.23, 349.23, 349.23, 293.66, 349.23, 392.0, 392.0, 311.13, 392.0, 349.23, 466.16, 587.33, 523.25, 466.16],
+  },
+  {
+    id: 'esm-12',
+    book: 'Ende Sekolah Minggu',
+    code: 'ESM 12',
+    title: 'YESUS SAYANG PADAKU',
+    subtitle: 'Nyanyian Sukacita Anak Sekolah Minggu',
+    keySignature: 'Do = C',
+    tempoBpm: 108,
+    timeSignature: '4/4',
+    composer: 'Sekolah Minggu HKBP',
+    playCount: 740,
+    verses: [
+      {
+        number: 1,
+        lines: [
+          'Yesus sayang padaku, Alkitab mengajarku.',
+          'Walau ku kecil lemah, aku ini milik-Nya.',
+          'Yesus Tuhanku sayang padaku,',
+          'Itu firman-Nya di dalam Alkitab.',
+        ],
+      },
+    ],
+    notation: [
+      'Do = C | 4/4 | Ceria',
+      '5 3 3 2 | 3 5 5 . | 6 6 1> 6 | 6 5 5 . |',
+      '5 3 3 2 | 3 5 5 . | 6 5 3 2 | 1 . . 0 ||',
+    ],
+    melodyFreqs: [392.0, 329.63, 329.63, 293.66, 329.63, 392.0, 392.0, 440.0, 440.0, 523.25, 440.0, 440.0, 392.0],
+  },
+];
+
+export const HKBP_TV_VIDEOS: TvVideo[] = [
+  {
+    id: 'tv-01',
+    number: '01',
+    category: 'HKBP TV',
+    subCategory: 'Studio HKBP',
+    title: 'Ibadah Minggu & Renungan Khusus — Kasih Kristus Mempersatukan Jemaat',
+    speakerOrArtist: 'Studio HKBP · Pdt. Victor Tinambunan, MST',
+    date: '24 November 2026',
+    duration: '42:18',
+    thumbnailUrl: ASSETS.hkbpTvStudio,
+    youtubeUrl: 'https://www.youtube.com/@HKBPTV',
+    description:
+      'Siaran pelayanan firman dan pujian rohani dari Studio Multimedia HKBP untuk seluruh jemaat termasuk jemaat HKBP Parserahan.',
+  },
+  {
+    id: 'tv-02',
+    number: '02',
+    category: 'HKBP TV',
+    subCategory: 'Studio HKBP',
+    title: 'Hasudungan ni Roha - The Series (Production House Multimedia HKBP)',
+    speakerOrArtist: 'Multimedia HKBP · Seri Cerita Alkitab',
+    date: '21 November 2026',
+    duration: '14:05',
+    thumbnailUrl: ASSETS.storyAdamHawa,
+    youtubeUrl: 'https://www.youtube.com/results?search_query=Hasudungan+ni+Roha+HKBP',
+    description:
+      'Serial visual pengenalan cerita Alkitab dalam Bahasa Batak Toba untuk keluarga, remaja, dan Sekolah Minggu.',
+  },
+  {
+    id: 'tv-03',
+    number: '03',
+    category: 'HKBP TV',
+    subCategory: 'Khotbah Minggu',
+    title: 'Profil Pelayanan & Warta Pembangunan HKBP Parserahan',
+    speakerOrArtist: 'Tim Multimedia HKBP Parserahan',
+    date: '18 November 2026',
+    duration: '18:40',
+    thumbnailUrl: ASSETS.churchParserahanHero,
+    youtubeUrl: 'https://www.youtube.com/@HKBPTV',
+    description:
+      'Dokumentasi kegiatan persekutuan weyk, koor ama & ina, serta pelayanan diakonia di HKBP Parserahan.',
+  },
+  {
+    id: 'tv-04',
+    number: '04',
+    category: 'Karaoke',
+    subCategory: 'Studio HKBP',
+    title: 'Karaoke Buku Ende 167 — Dijangkon Jesus Do Pardosa (Lirik Sinkron)',
+    speakerOrArtist: 'Koor & Organ Studio HKBP',
+    date: '15 November 2026',
+    duration: '04:12',
+    thumbnailUrl: ASSETS.hkbpTvStudio,
+    youtubeUrl: 'https://www.youtube.com/results?search_query=Karaoke+BE+167+HKBP',
+    description:
+      'Iringan musik karaoke lengkap dengan teks lagu Bahasa Batak Toba untuk latihan koor keluarga dan partangiangan weyk.',
+  },
+  {
+    id: 'tv-05',
+    number: '05',
+    category: 'Instrumentalia',
+    subCategory: 'Studio HKBP',
+    title: 'Instrumentalia Piano & Saxophone — BE 28 Hata Ni Jahowa (Saat Teduh)',
+    speakerOrArtist: 'Ensambel Musik Gerejawi HKBP',
+    date: '10 November 2026',
+    duration: '06:35',
+    thumbnailUrl: ASSETS.storyNoahArk,
+    youtubeUrl: 'https://www.youtube.com/results?search_query=Instrumentalia+Buku+Ende+HKBP',
+    description:
+      'Musik instrumentalia teduh untuk menemani saat teduh pagi, doa keluarga, dan renungan pribadi.',
+  },
+];
+
+export const CHURCH_LOCATIONS: ChurchLocation[] = [
+  {
+    id: 'ch-1',
+    number: 1,
+    name: 'HKBP Parserahan',
+    ressort: 'Ressort Parserahan',
+    distrik: 'Distrik IV Toba',
+    address: 'Jl. Gereja No. 12, Parserahan, Kec. Balige, Kab. Toba',
+    pastor: 'Pdt. Parluhutan Lumbantobing, S.Th',
+    distanceKm: 0.4,
+    schedules: ['Minggu Pagi (B. Indonesia): 07.30 WIB', 'Minggu Siang (B. Batak): 10.00 WIB', 'Sekolah Minggu: 08.00 WIB'],
+    phone: '+62 812-6401-7712',
+    mapX: 48,
+    mapY: 46,
+    lat: 2.3342,
+    lng: 99.0648,
+    isHomeChurch: true,
+  },
+  {
+    id: 'ch-2',
+    number: 2,
+    name: 'HKBP Balige Kota',
+    ressort: 'Ressort Balige',
+    distrik: 'Distrik XI Toba Hasundutan',
+    address: 'Jl. Sisingamangaraja No. 45, Balige',
+    pastor: 'Pdt. Darwin Sihombing, M.Th',
+    distanceKm: 2.1,
+    schedules: ['Minggu I: 07.00 WIB', 'Minggu II: 09.30 WIB', 'Minggu Sore: 17.00 WIB'],
+    phone: '+62 632-21145',
+    mapX: 30,
+    mapY: 32,
+    lat: 2.3361,
+    lng: 99.0512,
+  },
+  {
+    id: 'ch-3',
+    number: 3,
+    name: 'HKBP Tampubolon',
+    ressort: 'Ressort Tampubolon',
+    distrik: 'Distrik XI Toba Hasundutan',
+    address: 'Desa Tampubolon, Balige, Toba',
+    pastor: 'Pdt. Rosmawati Hutapea, S.Th',
+    distanceKm: 3.4,
+    schedules: ['Minggu Pagi: 08.00 WIB', 'Minggu Umum (B. Batak): 10.30 WIB'],
+    phone: '+62 813-7022-8910',
+    mapX: 67,
+    mapY: 28,
+    lat: 2.3455,
+    lng: 99.0831,
+  },
+  {
+    id: 'ch-4',
+    number: 4,
+    name: 'HKBP Lumban Pea',
+    ressort: 'Ressort Tambunan',
+    distrik: 'Distrik XI Toba Hasundutan',
+    address: 'Jl. Lintas Sumatera, Lumban Pea, Toba',
+    pastor: 'Pdt. Josua Nababan, S.Th',
+    distanceKm: 4.8,
+    schedules: ['Sekolah Minggu: 08.00 WIB', 'Kebaktian Utama: 10.00 WIB'],
+    phone: '+62 812-6550-3301',
+    mapX: 74,
+    mapY: 64,
+    lat: 2.3210,
+    lng: 99.0912,
+  },
+  {
+    id: 'ch-5',
+    number: 5,
+    name: 'HKBP Laguboti',
+    ressort: 'Ressort Laguboti',
+    distrik: 'Distrik IV Toba',
+    address: 'Jl. Pemuda No. 8, Laguboti, Toba',
+    pastor: 'Pdt. Marudut Pangaribuan, S.Th',
+    distanceKm: 6.2,
+    schedules: ['Minggu Pagi: 07.30 WIB', 'Minggu Siang: 10.00 WIB'],
+    phone: '+62 632-33109',
+    mapX: 25,
+    mapY: 71,
+    lat: 2.3490,
+    lng: 99.1244,
+  },
+  {
+    id: 'ch-6',
+    number: 6,
+    name: 'HKBP Pearaja Tarutung',
+    ressort: 'Kantor Pusat HKBP',
+    distrik: 'Distrik II Silindung',
+    address: 'Kompleks Kantor Pusat HKBP, Pearaja, Tarutung',
+    pastor: 'Kantor Pusat HKBP',
+    distanceKm: 39.5,
+    schedules: ['Kebaktian Bahasa Batak: 10.00 WIB', 'Kebaktian Bahasa Indonesia: 07.30 WIB'],
+    phone: '+62 633-21707',
+    mapX: 16,
+    mapY: 54,
+    lat: 2.0228,
+    lng: 98.9698,
+  },
+];
+
+export const QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    id: 'q1',
+    category: 'Perjanjian Lama',
+    question: 'Di kitab apakah tertulis kisah Nehemia berdoa dan berjaga siang dan malam saat membangun tembok Yerusalem?',
+    options: ['Nehemia 4 : 8-9', 'Ezra 2 : 1', 'Daniel 6 : 10', 'Mazmur 23 : 1'],
+    correctIndex: 0,
+    explanation: 'Dalam Nehemia 4:8-9, umat Israel berdoa kepada Allah dan mengadakan penjagaan siang dan malam menghadapi ancaman musuh.',
+    xpReward: 25,
+  },
+  {
+    id: 'q2',
+    category: 'Sejarah HKBP',
+    question: 'Pada tanggal berapakah Huria Kristen Batak Protestan (HKBP) berdiri?',
+    options: ['17 Agustus 1945', '7 Oktober 1861', '25 Desember 1881', '10 November 1901'],
+    correctIndex: 1,
+    explanation: 'HKBP berdiri pada 7 Oktober 1861 di Sipirok oleh empat misionaris termasuk I.L. Nommensen yang melayani di tanah Batak.',
+    xpReward: 25,
+  },
+  {
+    id: 'q3',
+    category: 'Kitab Kejadian',
+    question: 'Dalam Bahasa Batak Toba, siapakah nama manusia pertama yang ditempatkan Tuhan di Porlak Eden?',
+    options: ['Si Noak dohot Si Sara', 'Si Adam dohot Si Haoa', 'Si Abraham dohot Si Rebekka', 'Si Musa dohot Si Mirjam'],
+    correctIndex: 1,
+    explanation: 'Sesuai 1 Musa 1-2, manusia pertama yang ditempatkan di Taman Eden adalah Si Adam dohot Si Haoa.',
+    xpReward: 25,
+  },
+  {
+    id: 'q4',
+    category: 'Perjanjian Baru',
+    question: 'Apa arti perkataan Yesus dalam Yohanes 15:5 "Akulah pokok anggur dan kamulah ranting-rantingnya"?',
+    options: [
+      'Kita harus bertani anggur setiap minggu',
+      'Orang percaya hanya dapat berbuah jika tetap tinggal di dalam Kristus',
+      'Ranting lebih kuat daripada akar pohon',
+      'Pelayanan hanya dilakukan di Yerusalem',
+    ],
+    correctIndex: 1,
+    explanation: 'Persekutuan yang erat dengan Tuhan Yesus adalah sumber kekuatan iman agar hidup kita menghasilkan buah Roh.',
+    xpReward: 25,
+  },
+  {
+    id: 'q5',
+    category: 'Musa & Keluaran',
+    question: 'Berapa jumlah tulah yang diturunkan Tuhan di tanah Mesir sebelum Firaun melepaskan bangsa Israel?',
+    options: ['7 Tulah', '10 Tulah', '12 Tulah', '40 Tulah'],
+    correctIndex: 1,
+    explanation: 'Tuhan menurunkan 10 tulah atas Mesir (Keluaran 7–12) hingga bangsa Israel dibebaskan keluar dari perbudakan.',
+    xpReward: 25,
+  },
+];
+
+export const INITIAL_TIMELINE_POSTS: TimelinePost[] = [
+  {
+    id: 'post-1',
+    author: 'Sekretariat HKBP Parserahan',
+    role: 'Parhalado / Admin',
+    avatarInitials: 'HP',
+    timestamp: '2 jam yang lalu',
+    category: 'Warta Jemaat',
+    content:
+      'Horas di hita saluhutna! Jadwal Partangiangan Weyk I - IV minggu ini dilaksanakan pada hari Kamis pukul 19.30 WIB di rumah keluarga masing-masing tuan rumah yang telah ditetapkan. Mari hadir bersama keluarga membawa Buku Ende & Alkitab.',
+    imageUrl: ASSETS.churchParserahanHero,
+    likes: 34,
+    likedByMe: false,
+    comments: [
+      { id: 'c1', author: 'Ny. Hutabarat br. Tobing', text: 'Horas! Kami dari Weyk II siap hadir malam Kamis.', time: '1 jam lalu' },
+      { id: 'c2', author: 'St. M. Panggabean', text: 'Tuhan memberkati persiapan tuan rumah weyk.', time: '45 mnt lalu' },
+    ],
+  },
+  {
+    id: 'post-2',
+    author: 'NHKBP Parserahan',
+    role: 'Naposobulung',
+    avatarInitials: 'NH',
+    timestamp: 'Kemarin · 18:15',
+    category: 'Kegiatan Pemuda',
+    content:
+      'Latihan Koor Persiapan Minggu Advent I untuk Naposobulung & Remaja HKBP Parserahan berjalan dengan penuh sukacita. Bagi rekan-rekan muda yang belum bergabung, ditunggu kehadirannya setiap Sabtu pukul 17.00 WIB di Gedung Serbaguna.',
+    likes: 27,
+    likedByMe: true,
+    comments: [
+      { id: 'c3', author: 'Kevin Sitorus', text: 'Mantap! Sampai jumpa latihan Sabtu sore.', time: '12 jam lalu' },
+    ],
+  },
+  {
+    id: 'post-3',
+    author: 'Seksi Sekolah Minggu',
+    role: 'Guru Sekolah Minggu',
+    avatarInitials: 'SM',
+    timestamp: '3 hari yang lalu',
+    category: 'Sekolah Minggu',
+    content:
+      'Anak-anak Sekolah Minggu baru saja menyelesaikan kelas cerita Hasudungan Ni Roha "Si Adam dohot Si Haoa" dalam Bahasa Batak. Orang tua dapat membacakan ulang ceritanya melalui menu Hasudungan Ni Roha di aplikasi ini.',
+    imageUrl: ASSETS.storyAdamHawa,
+    likes: 41,
+    likedByMe: false,
+    comments: [],
+  },
+];
+
+export const INITIAL_NOTIFICATIONS: AppNotification[] = [
+  {
+    id: 'notif-1',
+    title: 'Renungan Hari Ini Siap Dibaca',
+    message: 'Harian: Nehemia 4 : 8 — Marsada ni Roha Mamungka dohot Manjaga Ulaon ni Tuhan (BE. 790 : 1 - 2).',
+    time: '06:00 WIB',
+    type: 'renungan',
+    read: false,
+    targetRoute: { type: 'sub', view: 'renungan' },
+  },
+  {
+    id: 'notif-2',
+    title: 'Warta Jemaat HKBP Parserahan',
+    message: 'Kebaktian Minggu pagi pukul 07.30 WIB (B. Indonesia) dan pukul 10.00 WIB (B. Batak).',
+    time: 'Kemarin',
+    type: 'warta',
+    read: false,
+    targetRoute: { type: 'sub', view: 'media' },
+  },
+  {
+    id: 'notif-3',
+    title: 'Video Baru di HKBP TV',
+    message: 'Hasudungan ni Roha - The Series telah tayang di kanal Studio HKBP.',
+    time: '2 hari lalu',
+    type: 'event',
+    read: true,
+    targetRoute: { type: 'sub', view: 'hkbp-tv' },
+  },
+];
+
+export const BIBLE_BOOKS = [
+  {
+    id: 'nehemia',
+    nameIndo: 'Nehemia',
+    nameBatak: 'Nehemia',
+    chapters: [
+      {
+        chapter: 4,
+        verses: [
+          {
+            num: 6,
+            indo: 'Tetapi kami terus membangun tembok itu sampai setengah tingginya, karena seluruh bangsa bekerja dengan segenap hati.',
+            batak: 'Jadi hupatorus hami ma paulihon parik i, gabe tung mandok dapot ma satonga timbona, ai girgir do roha ni bangso i mulaulaon.',
+          },
+          {
+            num: 7,
+            indo: 'Ketika Sanbalat dan Tobia serta orang Arab dan orang Amon dan orang Asdod mendengar, bahwa pekerjaan perbaikan tembok Yerusalem maju dan lubang-lubang mulai ditutup, maka sangat marahlah mereka.',
+            batak: 'Alai dung dibege si Sanbalat dohot si Tobia dohot halak Arab dohot halak Amon dohot halak Asdod naung lam tu dengganna parik ni Jerusalem, jala naung mamungka dipauli angka bungbungna, tarrimas situtu ma nasida.',
+          },
+          {
+            num: 8,
+            indo: 'Mereka semua bersepakat untuk memerangi Yerusalem dan mengadakan kekacauan di sana.',
+            batak: 'Jadi martuptup ma nasida saluhutna naeng ro marporang dompak Jerusalem jala naeng manggaori huta i.',
+          },
+          {
+            num: 9,
+            indo: 'Tetapi kami berdoa kepada Allah kami, dan karena mereka kami mengadakan penjagaan terhadap mereka siang dan malam.',
+            batak: 'Alai martangiang do anggo hami tu Debatanami, jala hupajongjong hami angka parjaga dompak nasida arian dohot borngin ala ni nasida.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: '1musa',
+    nameIndo: 'Kejadian',
+    nameBatak: '1 Musa',
+    chapters: [
+      {
+        chapter: 1,
+        verses: [
+          {
+            num: 1,
+            indo: 'Pada mulanya Allah menciptakan langit dan bumi.',
+            batak: 'Di mula ni mulana ditompa Debata ma langit dohot tano on.',
+          },
+          {
+            num: 2,
+            indo: 'Bumi belum berbentuk dan kosong; gelap gulita menutupi samudera raya, dan Roh Allah melayang-layang di atas permukaan air.',
+            batak: 'Dung i ndang marrupa dope tano on jala rumar, holom marimpotimpot do di atas lung i, jala Tondi ni Debata mangareapreap di atas ni angka aek.',
+          },
+          {
+            num: 3,
+            indo: 'Berfirmanlah Allah: "Jadilah terang." Lalu terang itu jadi.',
+            batak: 'Dung i didok Debata ma: Jadi ma ho na tiur! Jadi tiur ma.',
+          },
+          {
+            num: 27,
+            indo: 'Maka Allah menciptakan manusia itu menurut gambar-Nya, menurut gambar Allah diciptakan-Nya dia; laki-laki dan perempuan diciptakan-Nya mereka.',
+            batak: 'Jadi ditompa Debata ma jolma i tumiru rupaNa, rupa ni Debata do ditiru Ibana manompa nasida, baoa dohot boruboru nasida ditompa.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'psalmen',
+    nameIndo: 'Mazmur',
+    nameBatak: 'Psalmen',
+    chapters: [
+      {
+        chapter: 121,
+        verses: [
+          {
+            num: 1,
+            indo: 'Aku melayangkan mataku ke gunung-gunung; dari manakah akan datang pertolonganku?',
+            batak: 'Hubereng do tu angka dolok: Sian dia ma ulaning ro pangurupion tu ahu?',
+          },
+          {
+            num: 2,
+            indo: 'Pertolonganku ialah dari TUHAN, yang menjadikan langit dan bumi.',
+            batak: 'Sian Jahowa Sitompa langit dohot tano on do ro pangurupion tu ahu.',
+          },
+          {
+            num: 3,
+            indo: 'Ia takkan membiarkan kakimu goyah, Penjagamu tidak akan terlelap.',
+            batak: 'Ndang tagamon loasonNa tarsulandit patmu, ndang tagamon nok mata ni Sijaga ho.',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'johannes',
+    nameIndo: 'Yohanes',
+    nameBatak: 'Johannes',
+    chapters: [
+      {
+        chapter: 3,
+        verses: [
+          {
+            num: 16,
+            indo: 'Karena begitu besar kasih Allah akan dunia ini, sehingga Ia telah mengaruniakan Anak-Nya yang tunggal, supaya setiap orang yang percaya kepada-Nya tidak binasa, melainkan beroleh hidup yang kekal.',
+            batak: 'Ai songon on do holong ni roha ni Debata di portibi on, pola do AnakNa na sasada i dilehon, asa unang mago ganup na porsea di Ibana, asa hangoluan na salelenglelengna di ibana.',
+          },
+        ],
+      },
+    ],
+  },
+];

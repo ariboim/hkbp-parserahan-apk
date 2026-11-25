@@ -1,0 +1,6 @@
+{
+  "name": "HKBP Parserahan",
+  "description": "Aplikasi web jemaat HKBP Parserahan: Renungan harian, Alkitab, Hasudungan Ni Roha, Musik Buku Ende, HKBP TV, Cari Gereja, Game Alkitab, dan Kartu Identitas Digital.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
