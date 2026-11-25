@@ -29,6 +29,7 @@ import { useFullSongPlayer } from './hooks/useFullSongPlayer';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { MiniPlayerBar } from './components/MiniPlayerBar';
+import { BetaWelcomeGate } from './components/BetaWelcomeGate';
 import { HomeView } from './views/HomeView';
 import { AlkitabView } from './views/AlkitabView';
 import { TimelineView } from './views/TimelineView';
@@ -60,6 +61,13 @@ const SUBVIEW_TITLES: Record<SubView, string> = {
 };
 
 export default function App() {
+  const [betaAccepted, setBetaAccepted] = useState<boolean>(() => {
+    try {
+      return sessionStorage.getItem('hkbp_beta_accepted') === 'true';
+    } catch {
+      return false;
+    }
+  });
   const [routeHistory, setRouteHistory] = useState<ActiveRoute[]>([
     { type: 'tab', tab: 'beranda' },
   ]);
@@ -221,6 +229,27 @@ export default function App() {
     currentRoute.type === 'tab' ? currentRoute.tab : null;
 
   const isOnFullPlayer = currentRoute.type === 'sub' && currentRoute.view === 'musik-player';
+
+  const handleAcceptBeta = useCallback((goToFeedback = false) => {
+    try {
+      sessionStorage.setItem('hkbp_beta_accepted', 'true');
+    } catch {
+      // ignore
+    }
+    setBetaAccepted(true);
+    if (goToFeedback) {
+      setRouteHistory([{ type: 'tab', tab: 'beranda' }, { type: 'sub', view: 'aspirasi' }]);
+    }
+  }, []);
+
+  if (!betaAccepted) {
+    return (
+      <BetaWelcomeGate
+        onContinue={() => handleAcceptBeta(false)}
+        onGiveFeedback={() => handleAcceptBeta(true)}
+      />
+    );
+  }
 
   const renderContent = () => {
     if (currentRoute.type === 'tab') {

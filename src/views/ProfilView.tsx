@@ -1,8 +1,10 @@
-import React from 'react';
-import { BellRing, LogOut, Moon, RefreshCw, Sun, Trophy } from 'lucide-react';
+import React, { useState } from 'react';
+import { BellRing, Check, Copy, LogOut, Moon, RefreshCw, Share2, Sun, Trophy } from 'lucide-react';
 import { CardTheme, ReminderSettings, UserProfile } from '../types';
 import { DigitalIdCard } from '../components/DigitalIdCard';
 import { PWAInstallButton } from '../components/PWAInstallButton';
+
+export const PUBLIC_BETA_URL = 'https://ais-pre-gvgvciqeeotukjx2hl4cp4-963636008472.asia-southeast1.run.app';
 
 interface ProfilViewProps {
   profile: UserProfile;
@@ -29,6 +31,24 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
   onToggleDarkMode,
   onOpenNotifications,
 }) => {
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  const handleShareBetaLink = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: 'HKBP Parserahan (Beta)',
+          text: 'Coba aplikasi beta HKBP Parserahan dan berikan masukan untuk finalisasi terbaik:',
+          url: PUBLIC_BETA_URL,
+        })
+        .catch(() => {});
+    } else if (navigator.clipboard) {
+      navigator.clipboard.writeText(PUBLIC_BETA_URL).catch(() => {});
+    }
+    setCopiedLink(true);
+    window.setTimeout(() => setCopiedLink(false), 2500);
+  };
+
   return (
     <div className="space-y-6 pb-8">
       {/* Header Profile Card */}
@@ -142,6 +162,31 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
                     appDarkMode ? 'translate-x-5' : 'translate-x-0'
                   }`}
                 />
+              </button>
+            </div>
+
+            {/* Share Public Beta Link */}
+            <div className="py-3.5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0">
+                  <Share2 className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                    Bagikan Link Beta Publik
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                    Akses jemaat tanpa perlu domain khusus
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleShareBetaLink}
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-700 min-h-[38px] shrink-0"
+              >
+                {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copiedLink ? 'Tersalin' : 'Salin Link'}</span>
               </button>
             </div>
           </div>
