@@ -1,0 +1,121 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isRootAdmin() {
+      return isVerifiedUser() && request.auth.token.email == 'bca.ccpl@gmail.com';
+    }
+
+    function isAdmin() {
+      return isRootAdmin() || (
+        isVerifiedUser() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidAspirationCreate(data) {
+      return data.keys().hasAll(['senderName', 'weyk', 'subject', 'message', 'status', 'createdAt']) &&
+        data.keys().hasOnly(['senderName', 'weyk', 'subject', 'message', 'status', 'createdAt', 'authorUid']) &&
+        data.senderName is string && data.senderName.size() >= 1 && data.senderName.size() <= 80 &&
+        data.weyk is string && data.weyk.size() >= 1 && data.weyk.size() <= 100 &&
+        data.subject is string && data.subject.size() >= 2 && data.subject.size() <= 100 &&
+        data.message is string && data.message.size() >= 5 && data.message.size() <= 1500 &&
+        data.status is string && data.status == 'Baru' &&
+        data.createdAt == request.time &&
+        (!('authorUid' in data) || (
+          isSignedIn() &&
+          data.authorUid is string &&
+          data.authorUid.size() >= 1 &&
+          data.authorUid.size() <= 128 &&
+          data.authorUid == request.auth.uid
+        ));
+    }
+
+    function isValidAspirationUpdate(data, prev) {
+      return data.keys().hasAll(['senderName', 'weyk', 'subject', 'message', 'status', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['senderName', 'weyk', 'subject', 'message', 'status', 'adminNote', 'authorUid', 'createdAt', 'updatedAt']) &&
+        data.senderName is string && data.senderName.size() >= 1 && data.senderName.size() <= 80 &&
+        data.weyk is string && data.weyk.size() >= 1 && data.weyk.size() <= 100 &&
+        data.subject is string && data.subject.size() >= 2 && data.subject.size() <= 100 &&
+        data.message is string && data.message.size() >= 5 && data.message.size() <= 1500 &&
+        data.senderName == prev.senderName &&
+        data.weyk == prev.weyk &&
+        data.subject == prev.subject &&
+        data.message == prev.message &&
+        data.createdAt == prev.createdAt &&
+        (!('authorUid' in prev) ? !('authorUid' in data) : ('authorUid' in data && data.authorUid == prev.authorUid)) &&
+        data.status is string && data.status in ['Baru', 'Dibaca', 'Ditindaklanjuti', 'Selesai'] &&
+        (!('adminNote' in data) || (data.adminNote is string && data.adminNote.size() <= 500)) &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidAdminUserCreate(data) {
+      return data.keys().hasAll(['email', 'name', 'role', 'createdAt']) &&
+        data.keys().hasOnly(['email', 'name', 'role', 'createdAt']) &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 150 &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+        data.role is string && data.role == 'Admin Utama (Ketua)' &&
+        data.createdAt == request.time;
+    }
+
+    function isValidAdminUserUpdate(data, prev) {
+      return data.keys().hasAll(['email', 'name', 'role', 'createdAt']) &&
+        data.keys().hasOnly(['email', 'name', 'role', 'createdAt']) &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 150 &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 100 &&
+        data.role is string && data.role == 'Admin Utama (Ketua)' &&
+        data.createdAt == prev.createdAt;
+    }
+
+    match /aspirations/{aspirationId} {
+      allow get: if isValidId(aspirationId) && (
+        isAdmin() ||
+        (isSignedIn() && 'authorUid' in existing() && existing().authorUid == request.auth.uid)
+      );
+      allow list: if isRootAdmin() || (
+        isSignedIn() && 'authorUid' in existing() && existing().authorUid == request.auth.uid
+      );
+      allow create: if isValidId(aspirationId) && isValidAspirationCreate(incoming());
+      allow update: if isAdmin() &&
+        isValidId(aspirationId) &&
+        isValidAspirationUpdate(incoming(), existing()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['status', 'adminNote', 'updatedAt']);
+      allow delete: if isAdmin() && isValidId(aspirationId);
+    }
+
+    match /admins/{adminUid} {
+      allow get: if isAdmin() && isValidId(adminUid);
+      allow list: if isRootAdmin();
+      allow create: if isRootAdmin() && isValidId(adminUid) && isValidAdminUserCreate(incoming());
+      allow update: if isRootAdmin() &&
+        isValidId(adminUid) &&
+        isValidAdminUserUpdate(incoming(), existing()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['email', 'name', 'role']);
+      allow delete: if isRootAdmin() && isValidId(adminUid);
+    }
+  }
+}

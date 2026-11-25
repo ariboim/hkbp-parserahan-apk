@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BellRing, Check, Copy, LogOut, Moon, RefreshCw, Share2, Sun, Trophy } from 'lucide-react';
+import { BellRing, Check, Copy, LogOut, Moon, RefreshCw, Share2, ShieldCheck, Sun, Trophy } from 'lucide-react';
 import { CardTheme, ReminderSettings, UserProfile } from '../types';
 import { DigitalIdCard } from '../components/DigitalIdCard';
 import { PWAInstallButton } from '../components/PWAInstallButton';
@@ -18,6 +18,7 @@ interface ProfilViewProps {
   onSwitchAccount: () => void;
   onToggleDarkMode: () => void;
   onOpenNotifications: () => void;
+  onOpenAdminDashboard: () => void;
 }
 
 export const ProfilView: React.FC<ProfilViewProps> = ({
@@ -31,6 +32,7 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
   onSwitchAccount,
   onToggleDarkMode,
   onOpenNotifications,
+  onOpenAdminDashboard,
 }) => {
   const [copiedLink, setCopiedLink] = useState(false);
 
@@ -119,6 +121,28 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
           </h3>
 
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
+            {/* Admin Dashboard Shortcut */}
+            <button
+              type="button"
+              onClick={onOpenAdminDashboard}
+              className="w-full py-3.5 flex items-center justify-between gap-3 text-left"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#0D47A1] dark:text-blue-400 flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                    Dashboard Admin Aspirasi
+                  </p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Pantau seluruh masukan beta & pokok doa jemaat
+                  </p>
+                </div>
+              </div>
+              <span className="text-xs font-bold text-[#0D47A1] dark:text-blue-400">Buka</span>
+            </button>
+
             {/* Reminder Shortcut */}
             <button
               type="button"

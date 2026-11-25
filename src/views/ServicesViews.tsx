@@ -8,11 +8,14 @@ import {
   MessageSquareHeart,
   Newspaper,
   Send,
+  ShieldCheck,
   Users,
 } from 'lucide-react';
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { ASSETS } from '../data/mockData';
-import { SubView, UserProfile } from '../types';
+import { AspirationRecord, SubView, UserProfile } from '../types';
 import { ImageWithFallback } from '../components/ImageWithFallback';
+import { ASPIRATION_LIMITS, auth, db, handleFirestoreError, OperationType } from '../firebase';
 
 interface ServicesViewsProps {
   view: Extract<
@@ -20,9 +23,14 @@ interface ServicesViewsProps {
     'almanak' | 'pengajaran' | 'media' | 'organisasi' | 'absensi' | 'donasi' | 'event' | 'aspirasi'
   >;
   profile: UserProfile;
+  onOpenAdminDashboard?: () => void;
 }
 
-export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) => {
+export const ServicesViews: React.FC<ServicesViewsProps> = ({
+  view,
+  profile,
+  onOpenAdminDashboard,
+}) => {
   // Absensi state
   const [checkedInList, setCheckedInList] = useState<string[]>([
     'Minggu, 22 Nov 2026 · Kebaktian Pagi 07.30 WIB (Hadir)',
@@ -38,18 +46,15 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
   // Event RSVP state
   const [rsvpIds, setRsvpIds] = useState<string[]>(['ev-1']);
 
-  // Aspirasi state
-  const [aspirasiSubject, setAspirasiSubject] = useState('Pokok Doa Keluarga');
+  // Aspirasi state (persisted centrally to Firestore + immediate session feedback list)
+  const [aspirasiSenderName, setAspirasiSenderName] = useState(profile.name);
+  const [aspirasiWeyk, setAspirasiWeyk] = useState('HKBP Jatisampurna Wijk Parserahan');
+  const [aspirasiSubject, setAspirasiSubject] = useState('Masukan Aplikasi Beta');
   const [aspirasiMsg, setAspirasiMsg] = useState('');
-  const [aspirasiList, setAspirasiList] = useState([
-    {
-      id: 'asp-1',
-      subject: 'Usulan Jadwal Koor Gabungan',
-      message: 'Mohon dipertimbangkan latihan koor gabungan menjelang Minggu Advent di HKBP Jatisampurna Wijk Parserahan.',
-      status: 'Diterima Parhalado',
-      date: '20 Nov 2026',
-    },
-  ]);
+  const [aspirasiSubmitting, setAspirasiSubmitting] = useState(false);
+  const [aspirasiSuccess, setAspirasiSuccess] = useState<string | null>(null);
+  const [aspirasiError, setAspirasiError] = useState<string | null>(null);
+  const [aspirasiList, setAspirasiList] = useState<AspirationRecord[]>([]);
 
   if (view === 'almanak') {
     const calendarEntries = [
@@ -407,31 +412,93 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
     );
   }
 
-  // Aspirasi
-  const handleAspirasiSubmit = (e: React.FormEvent) => {
+  // Aspirasi (Persisted to Firestore)
+  const handleAspirasiSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!aspirasiMsg.trim()) return;
-    setAspirasiList((prev) => [
-      {
-        id: `asp-${Date.now()}`,
-        subject: aspirasiSubject,
-        message: aspirasiMsg.trim(),
-        status: 'Terkirim ke Parhalado',
-        date: 'Hari ini',
-      },
-      ...prev,
-    ]);
-    setAspirasiMsg('');
+    setAspirasiError(null);
+    setAspirasiSuccess(null);
+
+    const senderName = aspirasiSenderName.trim().slice(0, ASPIRATION_LIMITS.senderNameMax);
+    const weyk = aspirasiWeyk.trim().slice(0, ASPIRATION_LIMITS.weykMax);
+    const subject = aspirasiSubject.trim().slice(0, ASPIRATION_LIMITS.subjectMax);
+    const message = aspirasiMsg.trim().slice(0, ASPIRATION_LIMITS.messageMax);
+
+    if (senderName.length < ASPIRATION_LIMITS.senderNameMin) {
+      setAspirasiError('Mohon isi nama pengirim atau tulis "Jemaat / Anonim".');
+      return;
+    }
+    if (message.length < ASPIRATION_LIMITS.messageMin) {
+      setAspirasiError('Pesan minimal 5 karakter agar dapat ditindaklanjuti.');
+      return;
+    }
+
+    const docId = `asp_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    const docPath = `aspirations/${docId}`;
+
+    const payload: {
+      senderName: string;
+      weyk: string;
+      subject: string;
+      message: string;
+      status: 'Baru';
+      createdAt: ReturnType<typeof serverTimestamp>;
+      authorUid?: string;
+    } = {
+      senderName,
+      weyk: weyk || 'HKBP Jatisampurna Wijk Parserahan',
+      subject,
+      message,
+      status: 'Baru',
+      createdAt: serverTimestamp(),
+      ...(auth.currentUser?.uid ? { authorUid: auth.currentUser.uid } : {}),
+    };
+
+    setAspirasiSubmitting(true);
+    try {
+      await setDoc(doc(db, 'aspirations', docId), payload);
+      setAspirasiList((prev) => [
+        {
+          id: docId,
+          senderName,
+          weyk: payload.weyk,
+          subject,
+          message,
+          status: 'Baru',
+          createdAtMs: Date.now(),
+        },
+        ...prev,
+      ]);
+      setAspirasiMsg('');
+      setAspirasiSuccess(
+        'Terima kasih! Masukan Anda telah tersimpan ke database gereja dan siap dipantau oleh Admin Utama.'
+      );
+    } catch (error) {
+      handleFirestoreError(error, OperationType.CREATE, docPath);
+    } finally {
+      setAspirasiSubmitting(false);
+    }
   };
 
   return (
     <div className="space-y-5 pb-8">
-      <section className="rounded-3xl bg-gradient-to-br from-[#0D47A1] to-indigo-800 text-white p-5 sm:p-6">
-        <div className="flex items-center gap-2 text-blue-100 text-xs font-semibold">
-          <MessageSquareHeart className="w-4 h-4" />
-          <span>Suara Jemaat & Pokok Doa</span>
+      <section className="rounded-3xl bg-gradient-to-br from-[#0D47A1] to-indigo-800 text-white p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-blue-100 text-xs font-semibold">
+            <MessageSquareHeart className="w-4 h-4" />
+            <span>Suara Jemaat, Masukan Beta & Pokok Doa</span>
+          </div>
+          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Aspirasi Jemaat</h1>
         </div>
-        <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Aspirasi Jemaat</h1>
+        {onOpenAdminDashboard && (
+          <button
+            type="button"
+            onClick={onOpenAdminDashboard}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold min-h-[42px] transition-colors"
+          >
+            <ShieldCheck className="w-4 h-4 text-amber-300" />
+            <span>Dashboard Admin</span>
+          </button>
+        )}
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
@@ -440,8 +507,40 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
           className="lg:col-span-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-4"
         >
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
-            Kirim Aspirasi atau Pokok Doa
+            Kirim Aspirasi atau Masukan Beta
           </h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                Nama Pengirim
+              </label>
+              <input
+                type="text"
+                required
+                maxLength={ASPIRATION_LIMITS.senderNameMax}
+                value={aspirasiSenderName}
+                onChange={(e) => setAspirasiSenderName(e.target.value)}
+                placeholder="Nama Anda atau Anonim"
+                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-white"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                Asal Wijk / Keterangan
+              </label>
+              <input
+                type="text"
+                required
+                maxLength={ASPIRATION_LIMITS.weykMax}
+                value={aspirasiWeyk}
+                onChange={(e) => setAspirasiWeyk(e.target.value)}
+                placeholder="Wijk Parserahan"
+                className="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-white"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="text-xs font-semibold text-slate-600 dark:text-slate-300">
               Kategori
@@ -451,6 +550,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
               onChange={(e) => setAspirasiSubject(e.target.value)}
               className="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-white"
             >
+              <option>Masukan Aplikasi Beta</option>
               <option>Pokok Doa Keluarga</option>
               <option>Saran Pelayanan Ibadah</option>
               <option>Kunjungan Diakonia / Orang Sakit</option>
@@ -458,35 +558,71 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
             </select>
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-              Pesan untuk Parhalado HKBP Jatisampurna Wijk Parserahan
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                Pesan untuk Admin Utama / Parhalado HKBP Jatisampurna Wijk Parserahan
+              </label>
+              <span className="text-[11px] font-mono-nums text-slate-400">
+                {aspirasiMsg.length}/{ASPIRATION_LIMITS.messageMax}
+              </span>
+            </div>
             <textarea
               rows={4}
               required
+              minLength={ASPIRATION_LIMITS.messageMin}
+              maxLength={ASPIRATION_LIMITS.messageMax}
               value={aspirasiMsg}
               onChange={(e) => setAspirasiMsg(e.target.value)}
-              placeholder="Tuliskan pokok doa atau masukan Anda..."
+              placeholder="Tuliskan masukan aplikasi beta, pokok doa, atau saran pelayanan Anda..."
               className="mt-1 w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-white"
             />
           </div>
+
+          {aspirasiError && (
+            <p className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 text-xs font-medium">
+              {aspirasiError}
+            </p>
+          )}
+          {aspirasiSuccess && (
+            <p className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 text-xs font-medium">
+              {aspirasiSuccess}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="w-full inline-flex items-center justify-center gap-2 min-h-[44px] rounded-xl bg-[#0D47A1] text-white text-sm font-bold hover:bg-[#1565C0]"
+            disabled={aspirasiSubmitting}
+            className="w-full inline-flex items-center justify-center gap-2 min-h-[44px] rounded-xl bg-[#0D47A1] text-white text-sm font-bold hover:bg-[#1565C0] disabled:opacity-60"
           >
             <Send className="w-4 h-4" />
-            <span>Kirim Aspirasi</span>
+            <span>{aspirasiSubmitting ? 'Mengirim ke Server...' : 'Kirim Aspirasi'}</span>
           </button>
         </form>
 
         <div className="lg:col-span-6 space-y-3">
+          <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-2">
+            <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
+              Tersimpan Terpusat untuk Admin Utama
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Seluruh masukan beta dan aspirasi yang Anda kirim akan langsung tersimpan ke database
+              terpusat gereja untuk ditinjau oleh Admin Utama (Ketua). Demi privasi jemaat, daftar
+              lengkap seluruh aspirasi hanya dapat dilihat melalui Dashboard Admin.
+            </p>
+          </div>
+
           {aspirasiList.map((item) => (
             <div key={item.id} className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-2">
               <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-                <span className="font-bold text-[#0D47A1] dark:text-blue-400">{item.status}</span>
-                <span>{item.date}</span>
+                <span className="font-bold text-[#0D47A1] dark:text-blue-400">
+                  Terkirim · {item.status}
+                </span>
+                <span>Baru saja</span>
               </div>
               <h3 className="text-sm font-bold text-slate-900 dark:text-white">{item.subject}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Dari: {item.senderName} ({item.weyk})
+              </p>
               <p className="text-sm text-slate-600 dark:text-slate-300">{item.message}</p>
             </div>
           ))}

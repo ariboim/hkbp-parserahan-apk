@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "Aspiration": {
+      "title": "Aspiration",
+      "description": "Masukan beta, aspirasi jemaat, dan pokok doa yang dikirim melalui Kotak Aspirasi HKBP Jatisampurna Wijk Parserahan.",
+      "type": "object",
+      "properties": {
+        "senderName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Nama pengirim masukan atau pokok doa."
+        },
+        "weyk": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Asal wijk atau keterangan pengirim."
+        },
+        "subject": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Kategori aspirasi atau masukan beta."
+        },
+        "message": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 1500,
+          "description": "Isi pesan aspirasi, masukan beta, atau pokok doa."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Baru", "Dibaca", "Ditindaklanjuti", "Selesai"],
+          "description": "Status peninjauan oleh Admin Utama."
+        },
+        "adminNote": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "Catatan tindak lanjut dari Admin Utama."
+        },
+        "authorUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "UID Firebase Auth pengirim jika masuk dengan Google."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu server saat aspirasi dikirim."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu server saat status aspirasi diperbarui oleh admin."
+        }
+      },
+      "required": ["senderName", "weyk", "subject", "message", "status", "createdAt"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Daftar pengguna admin terotorisasi untuk memantau seluruh aspirasi jemaat.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 150,
+          "description": "Email Google terverifikasi milik admin."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100,
+          "description": "Nama tampilan admin."
+        },
+        "role": {
+          "type": "string",
+          "enum": ["Admin Utama (Ketua)"],
+          "description": "Peran administratif."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu server penetapan admin."
+        }
+      },
+      "required": ["email", "name", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/aspirations/{aspirationId}": {
+      "schema": {
+        "$ref": "#/entities/Aspiration"
+      },
+      "description": "Koleksi terpusat seluruh masukan beta, aspirasi, dan pokok doa jemaat."
+    },
+    "/admins/{adminUid}": {
+      "schema": {
+        "$ref": "#/entities/AdminUser"
+      },
+      "description": "Koleksi admin terotorisasi yang berhak membaca dan menindaklanjuti aspirasi."
+    }
+  }
+}

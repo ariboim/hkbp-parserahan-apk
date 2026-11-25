@@ -42,6 +42,7 @@ import { HkbpTvView } from './views/HkbpTvView';
 import { CariGerejaView } from './views/CariGerejaView';
 import { GameView } from './views/GameView';
 import { ServicesViews } from './views/ServicesViews';
+import { AdminDashboardView } from './views/AdminDashboardView';
 
 const SUBVIEW_TITLES: Record<SubView, string> = {
   renungan: 'Renungan Hari Ini',
@@ -58,6 +59,7 @@ const SUBVIEW_TITLES: Record<SubView, string> = {
   donasi: 'Donasi & Persembahan',
   event: 'Event Jemaat',
   aspirasi: 'Aspirasi Jemaat',
+  'admin-aspirasi': 'Dashboard Admin Aspirasi',
 };
 
 export default function App() {
@@ -97,6 +99,8 @@ export default function App() {
   const [posts, setPosts] = useState<TimelinePost[]>(INITIAL_TIMELINE_POSTS);
   const [notifications, setNotifications] = useState<AppNotification[]>(INITIAL_NOTIFICATIONS);
   const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
+  const [adminToken, setAdminToken] = useState<string | null>(null);
+  const [adminUsername, setAdminUsername] = useState<string | null>(null);
 
   const profile = DEMO_PROFILES[accountType];
 
@@ -305,6 +309,7 @@ export default function App() {
               }
               onToggleDarkMode={() => setAppDarkMode((d) => !d)}
               onOpenNotifications={() => setNotifDrawerOpen(true)}
+              onOpenAdminDashboard={() => navigate({ type: 'sub', view: 'admin-aspirasi' })}
             />
           );
       }
@@ -361,8 +366,29 @@ export default function App() {
         return <CariGerejaView />;
       case 'game':
         return <GameView xp={xp} onAddXp={(amt) => setXp((prev) => prev + amt)} />;
+      case 'admin-aspirasi':
+        return (
+          <AdminDashboardView
+            adminToken={adminToken}
+            adminUsername={adminUsername}
+            onLoginSuccess={(token, username) => {
+              setAdminToken(token);
+              setAdminUsername(username);
+            }}
+            onLogout={() => {
+              setAdminToken(null);
+              setAdminUsername(null);
+            }}
+          />
+        );
       default:
-        return <ServicesViews view={currentRoute.view} profile={profile} />;
+        return (
+          <ServicesViews
+            view={currentRoute.view}
+            profile={profile}
+            onOpenAdminDashboard={() => navigate({ type: 'sub', view: 'admin-aspirasi' })}
+          />
+        );
     }
   };
 

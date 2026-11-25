@@ -14,7 +14,8 @@ export type SubView =
   | 'absensi'
   | 'donasi'
   | 'event'
-  | 'aspirasi';
+  | 'aspirasi'
+  | 'admin-aspirasi';
 
 export type ActiveRoute =
   | { type: 'tab'; tab: MainTab }
@@ -174,3 +175,19 @@ export interface UserProfile {
   initials: string;
   avatarUrl?: string;
 }
+
+export type AspirationStatus = 'Baru' | 'Dibaca' | 'Ditindaklanjuti' | 'Selesai';
+
+export interface AspirationRecord {
+  id: string;
+  senderName: string;
+  weyk: string;
+  subject: string;
+  message: string;
+  status: AspirationStatus;
+  adminNote?: string;
+  authorUid?: string;
+  createdAtMs: number;
+  updatedAtMs?: number;
+}
+

@@ -15,6 +15,7 @@ import {
   MessageSquareHeart,
   Music,
   Newspaper,
+  ShieldCheck,
   Sparkles,
   Tv,
   Users,
@@ -57,6 +58,7 @@ const MENU_ITEMS: MenuTile[] = [
   { id: 'aspirasi', label: 'Aspirasi', icon: MessageSquareHeart, bg: 'bg-blue-50 dark:bg-blue-950/60', text: 'text-blue-700 dark:text-blue-300', route: { type: 'sub', view: 'aspirasi' } },
   { id: 'hasudungan', label: 'Cerita Alkitab', icon: BookMarked, bg: 'bg-lime-50 dark:bg-lime-950/60', text: 'text-lime-700 dark:text-lime-300', route: { type: 'sub', view: 'hasudungan' } },
   { id: 'game', label: 'Game HKBP', icon: Gamepad2, bg: 'bg-purple-50 dark:bg-purple-950/60', text: 'text-purple-700 dark:text-purple-300', route: { type: 'sub', view: 'game' } },
+  { id: 'admin-aspirasi', label: 'Admin Aspirasi', icon: ShieldCheck, bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-[#0D47A1] dark:text-blue-300', route: { type: 'sub', view: 'admin-aspirasi' } },
 ];
 
 export const HomeView: React.FC<HomeViewProps> = ({
@@ -246,7 +248,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             MENU UTAMA
           </h2>
           <span className="text-xs text-slate-500 dark:text-slate-400">
-            14 Layanan Jemaat
+            15 Layanan Jemaat
           </span>
         </div>
 
