@@ -34,6 +34,7 @@ import {
 } from './types';
 import { useReminderNotification } from './hooks/useReminderNotification';
 import { useFullSongPlayer } from './hooks/useFullSongPlayer';
+import { useAutoRefresh } from './hooks/useAutoRefresh';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { MiniPlayerBar } from './components/MiniPlayerBar';
@@ -182,6 +183,7 @@ export default function App() {
     setRecentSongIds((prev) => [id, ...prev.filter((item) => item !== id)].slice(0, 6));
   }, []);
 
+  useAutoRefresh();
   const reminder = useReminderNotification(TODAY_DEVOTIONAL, handleAddNotification);
   const player = useFullSongPlayer('be-167', handleRecordPlay);
 

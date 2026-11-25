@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import crypto from 'node:crypto';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
@@ -11,6 +12,20 @@ const __dirname = path.dirname(__filename);
 const PORT = Number(process.env.PORT) || 3000;
 const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || crypto.randomBytes(32).toString('hex');
 const TOKEN_TTL_MS = 12 * 60 * 60 * 1000;
+const SERVER_BOOT_ID = crypto.randomBytes(8).toString('hex');
+
+function getAppVersion(): string {
+  const distIndexPath = path.resolve(__dirname, 'dist', 'index.html');
+  try {
+    if (process.env.NODE_ENV === 'production' && fs.existsSync(distIndexPath)) {
+      const content = fs.readFileSync(distIndexPath);
+      return crypto.createHash('sha256').update(content).digest('hex').slice(0, 16);
+    }
+  } catch {
+    // fallback to boot id
+  }
+  return SERVER_BOOT_ID;
+}
 
 interface ClaimedAdmin {
   username: string;
@@ -75,6 +90,13 @@ function verifyToken(token: string): { sub: string; role: string; exp: number } 
 async function startServer(): Promise<void> {
   const app = express();
   app.use(express.json({ limit: '16kb' }));
+
+  app.get('/api/app-version', (_req: Request, res: Response) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.json({ version: getAppVersion() });
+  });
 
   app.get('/api/admin/status', (_req: Request, res: Response) => {
     const envReady = isEnvConfigured();
@@ -159,6 +181,14 @@ async function startServer(): Promise<void> {
   });
 
   if (process.env.NODE_ENV !== 'production') {
+    app.use((req, res, next) => {
+      if (req.path === '/' || req.path.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+      }
+      next();
+    });
     const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true, hmr: false },
@@ -167,8 +197,21 @@ async function startServer(): Promise<void> {
     app.use(vite.middlewares);
   } else {
     const distDir = path.resolve(__dirname, 'dist');
-    app.use(express.static(distDir));
+    app.use(
+      express.static(distDir, {
+        setHeaders: (res, filePath) => {
+          if (filePath.endsWith('index.html') || filePath.endsWith('sw.js')) {
+            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
+          }
+        },
+      })
+    );
     app.get('*', (_req: Request, res: Response) => {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
       res.sendFile(path.join(distDir, 'index.html'));
     });
   }
