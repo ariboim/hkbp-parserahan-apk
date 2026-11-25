@@ -1,12 +1,15 @@
 import React, { useMemo, useState } from 'react';
-import { BookOpen, ChevronRight, Heart, Music, Play, Search } from 'lucide-react';
+import { BookOpen, ChevronRight, Heart, Music, Pause, Play, Search } from 'lucide-react';
 import { HYMN_SONGS } from '../data/mockData';
 import { ActiveRoute, HymnSong } from '../types';
 
 interface MusikViewProps {
   favoriteIds: string[];
   recentIds: string[];
+  activeSongId: string;
+  isPlaying: boolean;
   onToggleFavorite: (id: string) => void;
+  onPlaySongDirect: (songId: string) => void;
   onNavigate: (route: ActiveRoute) => void;
 }
 
@@ -45,7 +48,10 @@ const BOOK_COLLECTIONS: {
 export const MusikView: React.FC<MusikViewProps> = ({
   favoriteIds,
   recentIds,
+  activeSongId,
+  isPlaying,
   onToggleFavorite,
+  onPlaySongDirect,
   onNavigate,
 }) => {
   const [query, setQuery] = useState('');
@@ -82,6 +88,7 @@ export const MusikView: React.FC<MusikViewProps> = ({
   }, [recentIds]);
 
   const openSong = (songId: string) => {
+    onPlaySongDirect(songId);
     onNavigate({ type: 'sub', view: 'musik-player', param: songId });
   };
 
@@ -91,7 +98,7 @@ export const MusikView: React.FC<MusikViewProps> = ({
       <section className="rounded-3xl bg-gradient-to-br from-[#0D47A1] to-[#1565C0] text-white p-5 sm:p-6 shadow-sm">
         <h1 className="text-xl sm:text-2xl font-extrabold">Musik HKBP</h1>
         <p className="text-xs sm:text-sm text-blue-100 mt-1">
-          Semua nyanyian gereja dalam satu tempat — lengkap dengan lirik, notasi angka, dan audio melodi.
+          Semua nyanyian gereja dalam satu tempat — putar musik utuh 1 lagu dengan iringan penuh, lirik sinkron, dan notasi.
         </p>
 
         {/* Search Input */}
@@ -175,35 +182,42 @@ export const MusikView: React.FC<MusikViewProps> = ({
             Paling Sering Didengar
           </h2>
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
-            {mostPlayed.map((song, idx) => (
-              <div key={song.id} className="py-3 first:pt-1 last:pb-1 flex items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={() => openSong(song.id)}
-                  className="flex items-center gap-3 min-w-0 flex-1 text-left"
-                >
-                  <span className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#0D47A1] dark:text-blue-300 font-mono-nums text-xs font-bold flex items-center justify-center shrink-0">
-                    0{idx + 1}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
-                      {song.code} {song.title}
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-                      {song.book} · {song.playCount.toLocaleString('id-ID')}x diputar
-                    </p>
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openSong(song.id)}
-                  aria-label={`Putar ${song.title}`}
-                  className="min-h-[40px] min-w-[40px] rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center hover:bg-[#0D47A1] hover:text-white transition-colors"
-                >
-                  <Play className="w-4 h-4 fill-current" />
-                </button>
-              </div>
-            ))}
+            {mostPlayed.map((song, idx) => {
+              const isCurrent = activeSongId === song.id && isPlaying;
+              return (
+                <div key={song.id} className="py-3 first:pt-1 last:pb-1 flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={() => openSong(song.id)}
+                    className="flex items-center gap-3 min-w-0 flex-1 text-left"
+                  >
+                    <span className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-[#0D47A1] dark:text-blue-300 font-mono-nums text-xs font-bold flex items-center justify-center shrink-0">
+                      0{idx + 1}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                        {song.code} {song.title}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                        {song.book} · {song.arrangementStyle}
+                      </p>
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onPlaySongDirect(song.id)}
+                    aria-label={isCurrent ? `Jeda ${song.title}` : `Putar ${song.title}`}
+                    className={`min-h-[40px] min-w-[40px] rounded-xl flex items-center justify-center transition-colors ${
+                      isCurrent
+                        ? 'bg-[#0D47A1] text-white'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-[#0D47A1] hover:text-white'
+                    }`}
+                  >
+                    {isCurrent ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </section>
 
@@ -278,6 +292,7 @@ export const MusikView: React.FC<MusikViewProps> = ({
           <div className="divide-y divide-slate-100 dark:divide-slate-800">
             {filteredSongs.map((song) => {
               const isFav = favoriteIds.includes(song.id);
+              const isCurrent = activeSongId === song.id && isPlaying;
               return (
                 <div key={song.id} className="py-3 flex items-center justify-between gap-3">
                   <button
@@ -289,7 +304,7 @@ export const MusikView: React.FC<MusikViewProps> = ({
                       {song.code} · {song.title}
                     </p>
                     <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-                      {song.book} · {song.keySignature} · {song.verses.length} Ayat
+                      {song.book} · {song.arrangementStyle} · {song.verses.length} Ayat
                     </p>
                   </button>
                   <div className="flex items-center gap-1.5 shrink-0">
@@ -308,9 +323,13 @@ export const MusikView: React.FC<MusikViewProps> = ({
                     <button
                       type="button"
                       onClick={() => openSong(song.id)}
-                      className="px-3.5 py-2 rounded-xl bg-[#0D47A1] text-white text-xs font-semibold hover:bg-[#1565C0] min-h-[40px]"
+                      className={`px-3.5 py-2 rounded-xl text-xs font-semibold min-h-[40px] transition-colors ${
+                        isCurrent
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-[#0D47A1] text-white hover:bg-[#1565C0]'
+                      }`}
                     >
-                      Buka
+                      {isCurrent ? 'Diputar' : 'Putar'}
                     </button>
                   </div>
                 </div>

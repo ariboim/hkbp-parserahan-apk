@@ -25,8 +25,10 @@ import {
   TimelinePost,
 } from './types';
 import { useReminderNotification } from './hooks/useReminderNotification';
+import { useFullSongPlayer } from './hooks/useFullSongPlayer';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { OfflineIndicator } from './components/OfflineIndicator';
+import { MiniPlayerBar } from './components/MiniPlayerBar';
 import { HomeView } from './views/HomeView';
 import { AlkitabView } from './views/AlkitabView';
 import { TimelineView } from './views/TimelineView';
@@ -111,16 +113,29 @@ export default function App() {
     setNotifications((prev) => [notif, ...prev]);
   }, []);
 
-  const reminder = useReminderNotification(TODAY_DEVOTIONAL, handleAddNotification);
-
-  const navigate = useCallback((next: ActiveRoute) => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (next.type === 'tab') {
-      setRouteHistory([{ type: 'tab', tab: next.tab }]);
-    } else {
-      setRouteHistory((prev) => [...prev, next]);
-    }
+  const handleRecordPlay = useCallback((id: string) => {
+    setRecentSongIds((prev) => [id, ...prev.filter((item) => item !== id)].slice(0, 6));
   }, []);
+
+  const reminder = useReminderNotification(TODAY_DEVOTIONAL, handleAddNotification);
+  const player = useFullSongPlayer('be-167', handleRecordPlay);
+
+  const navigate = useCallback(
+    (next: ActiveRoute) => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (next.type === 'sub' && next.view === 'musik-player' && next.param) {
+        if (next.param !== player.currentSong.id) {
+          player.playSong(next.param, false);
+        }
+      }
+      if (next.type === 'tab') {
+        setRouteHistory([{ type: 'tab', tab: next.tab }]);
+      } else {
+        setRouteHistory((prev) => [...prev, next]);
+      }
+    },
+    [player]
+  );
 
   const goBack = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -133,9 +148,16 @@ export default function App() {
     );
   }, []);
 
-  const handleRecordPlay = useCallback((id: string) => {
-    setRecentSongIds((prev) => [id, ...prev.filter((item) => item !== id)].slice(0, 6));
-  }, []);
+  const handlePlaySongDirect = useCallback(
+    (songId: string) => {
+      if (player.currentSong.id === songId && player.hasLoadedTrack) {
+        player.togglePlay();
+      } else {
+        player.playSong(songId, true);
+      }
+    },
+    [player]
+  );
 
   const handleToggleLikePost = useCallback((postId: string) => {
     setPosts((prev) =>
@@ -198,6 +220,8 @@ export default function App() {
   const activeMainTab: MainTab | null =
     currentRoute.type === 'tab' ? currentRoute.tab : null;
 
+  const isOnFullPlayer = currentRoute.type === 'sub' && currentRoute.view === 'musik-player';
+
   const renderContent = () => {
     if (currentRoute.type === 'tab') {
       switch (currentRoute.tab) {
@@ -229,7 +253,10 @@ export default function App() {
             <MusikView
               favoriteIds={favoriteSongIds}
               recentIds={recentSongIds}
+              activeSongId={player.currentSong.id}
+              isPlaying={player.isPlaying}
               onToggleFavorite={handleToggleFavorite}
+              onPlaySongDirect={handlePlaySongDirect}
               onNavigate={navigate}
             />
           );
@@ -270,10 +297,32 @@ export default function App() {
       case 'musik-player':
         return (
           <MusikPlayerView
-            songId={currentRoute.param || 'be-167'}
+            song={player.currentSong}
+            isPlaying={player.isPlaying}
+            currentTimeSec={player.currentTimeSec}
+            totalDurationSec={player.totalDurationSec}
+            timeline={player.timeline}
+            currentSection={player.currentSection}
+            activeVerseNumber={player.activeVerseNumber}
+            activeLineIndex={player.activeLineIndex}
+            volume={player.volume}
+            isMuted={player.isMuted}
+            repeatMode={player.repeatMode}
+            shuffle={player.shuffle}
+            playbackRate={player.playbackRate}
             favoriteIds={favoriteSongIds}
             onToggleFavorite={handleToggleFavorite}
-            onRecordPlay={handleRecordPlay}
+            onTogglePlay={player.togglePlay}
+            onNext={player.nextTrack}
+            onPrev={player.prevTrack}
+            onSeek={player.seekToSeconds}
+            onJumpSection={player.jumpToSection}
+            onChangeVolume={player.setVolume}
+            onToggleMute={player.toggleMute}
+            onToggleShuffle={player.toggleShuffle}
+            onCycleRepeat={player.cycleRepeat}
+            onChangeSpeed={player.setPlaybackRate}
+            onSelectSong={(id) => player.playSong(id, true)}
           />
         );
       case 'hkbp-tv':
@@ -415,10 +464,30 @@ export default function App() {
         )}
 
         {/* Page Container */}
-        <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-24 lg:pb-10">
+        <main
+          className={`flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 ${
+            player.hasLoadedTrack && !isOnFullPlayer ? 'pb-36 lg:pb-24' : 'pb-24 lg:pb-10'
+          }`}
+        >
           {renderContent()}
         </main>
       </div>
+
+      {/* Persistent Spotify-Style Mini Player Bar */}
+      {player.hasLoadedTrack && !isOnFullPlayer && (
+        <MiniPlayerBar
+          song={player.currentSong}
+          isPlaying={player.isPlaying}
+          currentTimeSec={player.currentTimeSec}
+          totalDurationSec={player.totalDurationSec}
+          currentSection={player.currentSection}
+          onTogglePlay={player.togglePlay}
+          onNext={player.nextTrack}
+          onOpenPlayer={() =>
+            navigate({ type: 'sub', view: 'musik-player', param: player.currentSong.id })
+          }
+        />
+      )}
 
       {/* Fixed Bottom Navigation Bar (Mobile / Tablet) */}
       <nav

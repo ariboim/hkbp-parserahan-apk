@@ -54,21 +54,39 @@ export interface HymnVerse {
   lines: string[];
 }
 
+export interface SongChordBar {
+  name: string;
+  bassHz: number;
+  chordHz: number[];
+}
+
+export interface SongSection {
+  id: string;
+  label: string;
+  type: 'intro' | 'verse' | 'interlude' | 'outro';
+  verseNumber?: number;
+  durationSec: number;
+}
+
 export interface HymnSong {
   id: string;
   book: 'Buku Ende' | 'Buku Nyanyian' | 'Kidung Jemaat' | 'Ende Sekolah Minggu';
   code: string;
   title: string;
   subtitle: string;
+  arrangementStyle: string;
+  coverGradient: string;
   keySignature: string;
   tempoBpm: number;
   timeSignature: string;
   composer: string;
   playCount: number;
   lastPlayed?: string;
+  youtubeUrl: string;
   verses: HymnVerse[];
   notation: string[];
-  melodyFreqs: number[];
+  chords: SongChordBar[];
+  melodyNotes: { freq: number; beats: number }[];
 }
 
 export interface TvVideo {
