@@ -23,11 +23,11 @@ export const BetaWelcomeGate: React.FC<BetaWelcomeGateProps> = ({
               <p className="text-xs font-semibold text-amber-300">
                 Pratinjau Publik · Versi Beta
               </p>
-              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight">
-                HKBP Parserahan
+              <h1 className="text-lg sm:text-2xl font-extrabold tracking-tight leading-snug">
+                HKBP Jatisampurna Wijk Parserahan
               </h1>
               <p className="text-xs text-blue-100 mt-0.5">
-                Wijk parserahan HKBP Jatisampurna
+                Portal Jemaat Digital · Admin Utama (Ketua): Roberth Simatupang
               </p>
             </div>
           </div>

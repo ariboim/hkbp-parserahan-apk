@@ -99,7 +99,7 @@ export const DigitalIdCard: React.FC<DigitalIdCardProps> = ({
       <svg xmlns="http://www.w3.org/2000/svg" width="640" height="380" viewBox="0 0 640 380">
         <rect width="640" height="380" rx="24" fill="${theme === 'dark' ? '#0f172a' : theme === 'girly' ? '#e11d48' : '#0D47A1'}"/>
         <text x="36" y="54" fill="#ffffff" font-family="sans-serif" font-size="16" font-weight="bold">HURIA KRISTEN BATAK PROTESTAN</text>
-        <text x="36" y="78" fill="#dbeafe" font-family="sans-serif" font-size="13">Kartu Identitas Digital · HKBP Parserahan</text>
+        <text x="36" y="78" fill="#dbeafe" font-family="sans-serif" font-size="13">Kartu Identitas Digital · HKBP Jatisampurna Wijk Parserahan</text>
         <text x="36" y="150" fill="#ffffff" font-family="sans-serif" font-size="24" font-weight="bold">${profile.name}</text>
         <text x="36" y="182" fill="#e2e8f0" font-family="sans-serif" font-size="14">${profile.role} · ${profile.weyk}</text>
         <text x="36" y="250" fill="#cbd5e1" font-family="sans-serif" font-size="13">Email: ${profile.email}</text>
@@ -156,7 +156,7 @@ export const DigitalIdCard: React.FC<DigitalIdCardProps> = ({
               HURIA KRISTEN BATAK PROTESTAN
             </p>
             <p className={`text-xs mt-0.5 ${style.sub}`}>
-              Kartu Identitas Digital · HKBP Parserahan
+              Kartu Identitas Digital · HKBP Jatisampurna Wijk Parserahan
             </p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0 font-display font-extrabold text-sm">
@@ -167,9 +167,17 @@ export const DigitalIdCard: React.FC<DigitalIdCardProps> = ({
         {/* Identity Body + QR */}
         <div className="mt-5 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
           <div className="flex items-start gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-white text-[#0D47A1] font-display font-extrabold text-xl flex items-center justify-center shrink-0 shadow-inner">
-              {profile.initials}
-            </div>
+            {profile.avatarUrl ? (
+              <img
+                src={profile.avatarUrl}
+                alt={profile.name}
+                className="w-16 h-16 rounded-2xl object-cover object-top shrink-0 shadow-inner border-2 border-white/80 bg-white"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-2xl bg-white text-[#0D47A1] font-display font-extrabold text-xl flex items-center justify-center shrink-0 shadow-inner">
+                {profile.initials}
+              </div>
+            )}
             <div className="min-w-0">
               <h4 className="text-lg font-bold tracking-tight truncate">
                 {profile.name}
@@ -255,8 +263,8 @@ export const DigitalIdCard: React.FC<DigitalIdCardProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="w-full max-w-sm rounded-3xl bg-white dark:bg-slate-900 p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-center">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="text-base font-bold text-slate-900 dark:text-white">
-                QR Verifikasi HKBP Parserahan
+              <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white text-left">
+                QR Verifikasi HKBP Jatisampurna Wijk Parserahan
               </h4>
               <button
                 type="button"
@@ -279,7 +287,7 @@ export const DigitalIdCard: React.FC<DigitalIdCardProps> = ({
             <p className="mt-4 text-sm font-bold text-slate-900 dark:text-white">{profile.name}</p>
             <p className="text-xs font-mono-nums text-slate-500 dark:text-slate-400 mt-1">{profile.memberId}</p>
             <p className="text-xs text-slate-600 dark:text-slate-300 mt-3">
-              Pindai QR ini pada petugas penyambut jemaat untuk absensi ibadah atau verifikasi keanggotaan HKBP Parserahan.
+              Pindai QR ini pada petugas penyambut jemaat untuk absensi ibadah atau verifikasi keanggotaan HKBP Jatisampurna Wijk Parserahan.
             </p>
           </div>
         </div>

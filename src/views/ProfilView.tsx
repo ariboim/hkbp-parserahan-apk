@@ -39,8 +39,8 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
     if (navigator.share) {
       navigator
         .share({
-          title: 'HKBP Parserahan (Beta)',
-          text: 'Coba aplikasi beta HKBP Parserahan dan berikan masukan untuk finalisasi terbaik:',
+          title: 'HKBP Jatisampurna Wijk Parserahan (Beta)',
+          text: 'Coba aplikasi beta HKBP Jatisampurna Wijk Parserahan dan berikan masukan untuk finalisasi terbaik:',
           url: shareUrl,
         })
         .catch(() => {});
@@ -56,9 +56,17 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
       {/* Header Profile Card */}
       <section className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 rounded-2xl bg-[#0D47A1] text-white font-display font-extrabold text-xl flex items-center justify-center shrink-0">
-            {profile.initials}
-          </div>
+          {profile.avatarUrl ? (
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              className="w-16 h-16 rounded-2xl object-cover object-top shrink-0 border border-slate-200 dark:border-slate-700 shadow-xs"
+            />
+          ) : (
+            <div className="w-16 h-16 rounded-2xl bg-[#0D47A1] text-white font-display font-extrabold text-xl flex items-center justify-center shrink-0">
+              {profile.initials}
+            </div>
+          )}
           <div>
             <h1 className="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
               {profile.name}
@@ -81,7 +89,7 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
           >
             <RefreshCw className="w-3.5 h-3.5" />
             <span>
-              {accountType === 'jemaat' ? 'Ganti ke Pengurus/Admin' : 'Ganti ke Akun Jemaat'}
+              {accountType === 'jemaat' ? 'Ganti ke Admin Utama (Ketua)' : 'Ganti ke Akun Jemaat'}
             </span>
           </button>
           <button

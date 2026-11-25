@@ -44,7 +44,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
       <section className="rounded-3xl bg-gradient-to-br from-[#0D47A1] to-[#1565C0] text-white p-5 sm:p-6 shadow-sm flex flex-wrap items-center justify-between gap-4">
         <div>
           <p className="text-xs font-medium text-blue-100">
-            Persekutuan Jemaat HKBP Parserahan
+            Persekutuan Jemaat HKBP Jatisampurna Wijk Parserahan
           </p>
           <h1 className="text-xl sm:text-2xl font-extrabold mt-0.5">Timeline Jemaat</h1>
         </div>
@@ -87,9 +87,17 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950 text-[#0D47A1] dark:text-blue-300 font-display font-bold text-xs flex items-center justify-center shrink-0">
-                    {post.avatarInitials}
-                  </div>
+                  {post.avatarUrl ? (
+                    <img
+                      src={post.avatarUrl}
+                      alt={post.author}
+                      className="w-10 h-10 rounded-2xl object-cover object-top shrink-0 border border-slate-200 dark:border-slate-700"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950 text-[#0D47A1] dark:text-blue-300 font-display font-bold text-xs flex items-center justify-center shrink-0">
+                      {post.avatarInitials}
+                    </div>
+                  )}
                   <div className="min-w-0">
                     <h3 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                       {post.author}

@@ -92,7 +92,7 @@ export const MusikPlayerView: React.FC<MusikPlayerViewProps> = ({
   const isFav = favoriteIds.includes(song.id);
 
   const handleShare = () => {
-    const shareText = `${song.code} ${song.title} (${song.book}) — HKBP Parserahan`;
+    const shareText = `${song.code} ${song.title} (${song.book}) — HKBP Jatisampurna Wijk Parserahan`;
     if (navigator.share) {
       navigator.share({ title: song.title, text: shareText }).catch(() => {});
     } else if (navigator.clipboard) {

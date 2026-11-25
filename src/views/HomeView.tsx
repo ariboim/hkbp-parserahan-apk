@@ -74,13 +74,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
             <p className="text-xs font-medium text-blue-100">
-              Horas, {profile.name.split(' ')[0]}
+              Horas, {profile.name.split(' ')[0]} · {profile.role}
             </p>
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight truncate">
-              HKBP Parserahan
+            <h1 className="text-lg sm:text-2xl font-extrabold tracking-tight leading-snug mt-0.5">
+              HKBP Jatisampurna Wijk Parserahan
             </h1>
             <p className="text-xs text-blue-100/90 mt-0.5 leading-snug">
-              Wijk parserahan HKBP Jatisampurna
+              Ressort Jatisampurna · Distrik XIX Bekasi
             </p>
           </div>
 
@@ -105,9 +105,21 @@ export const HomeView: React.FC<HomeViewProps> = ({
               type="button"
               onClick={() => onNavigate({ type: 'tab', tab: 'profil' })}
               aria-label="Buka profil dan kartu identitas digital"
-              className="min-h-[44px] min-w-[44px] rounded-2xl bg-white text-[#0D47A1] font-display font-extrabold text-sm flex items-center justify-center shadow-xs hover:bg-blue-50 transition-colors"
+              className={`min-h-[44px] min-w-[44px] w-11 h-11 rounded-2xl overflow-hidden flex items-center justify-center shadow-xs transition-transform hover:scale-105 ${
+                profile.avatarUrl
+                  ? 'border-2 border-white/85 bg-white'
+                  : 'bg-white text-[#0D47A1] font-display font-extrabold text-sm hover:bg-blue-50'
+              }`}
             >
-              {profile.initials}
+              {profile.avatarUrl ? (
+                <img
+                  src={profile.avatarUrl}
+                  alt={profile.name}
+                  className="w-full h-full object-cover object-top"
+                />
+              ) : (
+                profile.initials
+              )}
             </button>
           </div>
         </div>
@@ -262,22 +274,22 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </section>
 
-      {/* HKBP Parserahan Church Info Card */}
+      {/* HKBP Jatisampurna Wijk Parserahan Church Info Card */}
       <section className="rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs grid grid-cols-1 md:grid-cols-12">
         <div className="md:col-span-5 h-44 md:h-auto overflow-hidden">
           <ImageWithFallback
             src={ASSETS.churchParserahanHero}
-            alt="Gedung Gereja HKBP Parserahan"
+            alt="Gedung Gereja HKBP Jatisampurna Wijk Parserahan"
             className="w-full h-full object-cover"
           />
         </div>
         <div className="md:col-span-7 p-5 sm:p-6 flex flex-col justify-between gap-4">
           <div>
             <p className="text-xs font-semibold text-[#0D47A1] dark:text-blue-400">
-              Ressort Parserahan · Distrik IV Toba
+              Ressort Jatisampurna · Distrik XIX Bekasi
             </p>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
-              Jadwal Ibadah HKBP Parserahan
+              Jadwal Ibadah HKBP Jatisampurna Wijk Parserahan
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-2">
               Minggu Pagi (B. Indonesia) 07.30 WIB · Sekolah Minggu 08.00 WIB · Minggu Siang (B. Batak) 10.00 WIB.

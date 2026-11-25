@@ -45,7 +45,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
     {
       id: 'asp-1',
       subject: 'Usulan Jadwal Koor Gabungan',
-      message: 'Mohon dipertimbangkan latihan koor gabungan menjelang Minggu Advent di HKBP Parserahan.',
+      message: 'Mohon dipertimbangkan latihan koor gabungan menjelang Minggu Advent di HKBP Jatisampurna Wijk Parserahan.',
       status: 'Diterima Parhalado',
       date: '20 Nov 2026',
     },
@@ -103,7 +103,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
       },
       {
         title: 'Bahan Marguru Malua (Katekisasi Sidi)',
-        topic: 'Modul Pembinaan Pemuda & Remaja HKBP Parserahan',
+        topic: 'Modul Pembinaan Pemuda & Remaja HKBP Jatisampurna Wijk Parserahan',
         summary: 'Ringkasan 10 Hukum Taurat (Patik ni Debata), Pengakuan Iman Rasuli, dan Sakramen Baptisan & Perjamuan Kudus.',
       },
     ];
@@ -137,14 +137,14 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
             <Newspaper className="w-4 h-4" />
             <span>Warta Jemaat & Dokumentasi</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Media HKBP Parserahan</h1>
+          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Media HKBP Jatisampurna Wijk Parserahan</h1>
         </section>
 
         <article className="rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs grid grid-cols-1 md:grid-cols-12">
           <div className="md:col-span-5 h-48 md:h-auto">
             <ImageWithFallback
               src={ASSETS.churchParserahanHero}
-              alt="Warta Jemaat HKBP Parserahan"
+              alt="Warta Jemaat HKBP Jatisampurna Wijk Parserahan"
               className="w-full h-full object-cover"
             />
           </div>
@@ -153,7 +153,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
               Warta Minggu · Edisi 22 November 2026
             </p>
             <h2 className="text-lg font-extrabold text-slate-900 dark:text-white">
-              Laporan Pelayanan & Jadwal Parhalado HKBP Parserahan
+              Laporan Pelayanan & Jadwal Parhalado HKBP Jatisampurna Wijk Parserahan
             </h2>
             <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1.5">
               <li>• Sermon Parhalado dilaksanakan setiap hari Kamis pukul 17.00 WIB di Konsistori.</li>
@@ -168,9 +168,9 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
 
   if (view === 'organisasi') {
     const groups = [
-      { name: 'Parhalado / Majelis Jemaat', lead: 'Pdt. Parluhutan Lumbantobing, S.Th', schedule: 'Sermon Kamis · 17.00 WIB', members: '18 Sintua & Pelayan' },
+      { name: 'Ketua Wijk / Pengurus Utama', lead: 'Roberth Simatupang (Admin Utama)', schedule: 'Koordinasi Rutin Wijk Parserahan', members: 'Admin Utama (Ketua)' },
       { name: 'Punguan Ina & Parompuan', lead: 'Ny. St. Siregar br. Hutabarat', schedule: 'Jumat · 16.00 WIB', members: '84 Anggota' },
-      { name: 'Punguan Ama HKBP Parserahan', lead: 'St. M. Panggabean', schedule: 'Sabtu · 19.30 WIB', members: '62 Anggota' },
+      { name: 'Punguan Ama HKBP Jatisampurna Wijk Parserahan', lead: 'St. M. Panggabean', schedule: 'Sabtu · 19.30 WIB', members: '62 Anggota' },
       { name: 'Naposobulung (NHKBP) & Remaja', lead: 'Kevin Sitorus', schedule: 'Sabtu · 17.00 WIB', members: '75 Pemuda' },
       { name: 'Seksi Sekolah Minggu', lead: 'Ribka br. Simatupang', schedule: 'Minggu · 08.00 WIB', members: '110 Anak' },
     ];
@@ -181,7 +181,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
             <Users className="w-4 h-4" />
             <span>Struktur Dewan & Kategorial</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Organisasi HKBP Parserahan</h1>
+          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Organisasi HKBP Jatisampurna Wijk Parserahan</h1>
         </section>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {groups.map((g, idx) => (
@@ -310,7 +310,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
             >
               <option>Pelean I & II (Mingguan)</option>
               <option>Persembahan Syukur Keluarga (Hamauliateon)</option>
-              <option>Dana Pembangunan Gedung Serbaguna Parserahan</option>
+              <option>Dana Pembangunan HKBP Jatisampurna Wijk Parserahan</option>
               <option>Diakonia Sosial Jemaat</option>
             </select>
           </div>
@@ -361,9 +361,9 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
 
   if (view === 'event') {
     const events = [
-      { id: 'ev-1', title: 'Perayaan Advent & Penyalakan Lilin Pertama', date: 'Minggu, 29 Nov 2026 · 10.00 WIB', place: 'Gedung Gereja HKBP Parserahan' },
-      { id: 'ev-2', title: 'Festival Koor Natal Antar Weyk se-Ressort Parserahan', date: 'Sabtu, 12 Des 2026 · 16.00 WIB', place: 'Halaman Gereja HKBP Parserahan' },
-      { id: 'ev-3', title: 'Natal Sekolah Minggu & Naposobulung', date: 'Sabtu, 19 Des 2026 · 17.30 WIB', place: 'Gedung Serbaguna Parserahan' },
+      { id: 'ev-1', title: 'Perayaan Advent & Penyalakan Lilin Pertama', date: 'Minggu, 29 Nov 2026 · 10.00 WIB', place: 'Gedung Gereja HKBP Jatisampurna Wijk Parserahan' },
+      { id: 'ev-2', title: 'Festival Koor Natal Antar Wijk se-HKBP Jatisampurna', date: 'Sabtu, 12 Des 2026 · 16.00 WIB', place: 'Halaman Gereja HKBP Jatisampurna Wijk Parserahan' },
+      { id: 'ev-3', title: 'Natal Sekolah Minggu & Naposobulung', date: 'Sabtu, 19 Des 2026 · 17.30 WIB', place: 'Gedung Serbaguna HKBP Jatisampurna Wijk Parserahan' },
     ];
     return (
       <div className="space-y-5 pb-8">
@@ -372,7 +372,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
             <CalendarDays className="w-4 h-4" />
             <span>Agenda Pelayanan Jemaat</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Event HKBP Parserahan</h1>
+          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Event HKBP Jatisampurna Wijk Parserahan</h1>
         </section>
         <div className="space-y-3">
           {events.map((ev) => {
@@ -459,7 +459,7 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({ view, profile }) =
           </div>
           <div>
             <label className="text-xs font-semibold text-slate-600 dark:text-slate-300">
-              Pesan untuk Parhalado HKBP Parserahan
+              Pesan untuk Parhalado HKBP Jatisampurna Wijk Parserahan
             </label>
             <textarea
               rows={4}

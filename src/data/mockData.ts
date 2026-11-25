@@ -16,28 +16,30 @@ export const ASSETS = {
   storyNoahArk: '/src/assets/images/story_noah_ark_1795591255159.jpg',
   hkbpTvStudio: '/src/assets/images/hkbp_tv_studio_1795591256014.jpg',
   churchParserahanHero: '/src/assets/images/church_parserahan_hero_1795591255659.jpg',
+  roberthSimatupangAvatar: '/assets/aistudio/IMG_20261125_180232_4235f81b.jpg',
 };
 
 export const DEMO_PROFILES: Record<'jemaat' | 'admin', UserProfile> = {
   jemaat: {
     name: 'Mangaraja Simanjuntak',
     role: 'Jemaat',
-    email: 'mangaraja.simanjuntak@hkbpparserahan.org',
-    memberId: 'HKBP-PSR-2026-0148',
-    weyk: 'Wijk parserahan HKBP Jatisampurna',
+    email: 'mangaraja.simanjuntak@hkbpjatisampurna.org',
+    memberId: 'HKBP-JTS-WPR-0148',
+    weyk: 'HKBP Jatisampurna Wijk Parserahan',
     status: 'Aktif',
     verified: true,
     initials: 'MS',
   },
   admin: {
-    name: 'St. Hotman Siregar',
-    role: 'Pengurus / Admin',
-    email: 'sekretariat@hkbpparserahan.org',
-    memberId: 'HKBP-PSR-ADM-0012',
-    weyk: 'Parhalado · HKBP Parserahan',
+    name: 'Roberth Simatupang',
+    role: 'Admin Utama (Ketua)',
+    email: 'roberth.simatupang@hkbpjatisampurna.org',
+    memberId: 'HKBP-JTS-WPR-0001',
+    weyk: 'HKBP Jatisampurna Wijk Parserahan',
     status: 'Aktif',
     verified: true,
-    initials: 'HS',
+    initials: 'RS',
+    avatarUrl: '/assets/aistudio/IMG_20261125_180232_4235f81b.jpg',
   },
 };
 
@@ -56,7 +58,7 @@ export const TODAY_DEVOTIONAL: Devotional = {
   hymnId: 'be-790',
   reflection: [
     'Dalam membangun kembali tembok Yerusalem, Nehemia dan umat Israel tidak hanya menghadapi kelelahan fisik, tetapi juga ancaman dan cemoohan dari pihak luar. Namun perhatikan urutan respons iman mereka: pertama-tama berdoa kepada Allah, lalu bertindak dengan penuh tanggung jawab menempatkan penjagaan siang dan malam.',
-    'Sebagai jemaat HKBP Parserahan, kita pun dipanggil untuk hidup dalam keseimbangan antara tangiang (doa) dan ulaon (karya nyata). Tantangan keluarga, pekerjaan, maupun pelayanan gereja tidak seharusnya mematahkan semangat kita ketika kita bersatu hati.',
+    'Sebagai jemaat HKBP Jatisampurna Wijk Parserahan, kita pun dipanggil untuk hidup dalam keseimbangan antara tangiang (doa) dan ulaon (karya nyata). Tantangan keluarga, pekerjaan, maupun pelayanan gereja tidak seharusnya mematahkan semangat kita ketika kita bersatu hati.',
     'Hari ini, bawalah setiap rencana dan bebanmu dalam doa kepada Tuhan Yesus, sambil tetap setia menjaga ketekunan kerja dan kasih persaudaraan di tengah weyk dan keluarga.',
   ],
   prayer:
@@ -593,7 +595,7 @@ export const HKBP_TV_VIDEOS: TvVideo[] = [
     thumbnailUrl: ASSETS.hkbpTvStudio,
     youtubeUrl: 'https://www.youtube.com/@HKBPTV',
     description:
-      'Siaran pelayanan firman dan pujian rohani dari Studio Multimedia HKBP untuk seluruh jemaat termasuk jemaat HKBP Parserahan.',
+      'Siaran pelayanan firman dan pujian rohani dari Studio Multimedia HKBP untuk seluruh jemaat termasuk jemaat HKBP Jatisampurna Wijk Parserahan.',
   },
   {
     id: 'tv-02',
@@ -614,14 +616,14 @@ export const HKBP_TV_VIDEOS: TvVideo[] = [
     number: '03',
     category: 'HKBP TV',
     subCategory: 'Khotbah Minggu',
-    title: 'Profil Pelayanan & Warta Pembangunan HKBP Parserahan',
-    speakerOrArtist: 'Tim Multimedia HKBP Parserahan',
+    title: 'Profil Pelayanan & Warta Pembangunan HKBP Jatisampurna Wijk Parserahan',
+    speakerOrArtist: 'Tim Multimedia HKBP Jatisampurna Wijk Parserahan',
     date: '18 November 2026',
     duration: '18:40',
     thumbnailUrl: ASSETS.churchParserahanHero,
     youtubeUrl: 'https://www.youtube.com/@HKBPTV',
     description:
-      'Dokumentasi kegiatan persekutuan weyk, koor ama & ina, serta pelayanan diakonia di HKBP Parserahan.',
+      'Dokumentasi kegiatan persekutuan weyk, koor ama & ina, serta pelayanan diakonia di HKBP Jatisampurna Wijk Parserahan.',
   },
   {
     id: 'tv-04',
@@ -657,18 +659,18 @@ export const CHURCH_LOCATIONS: ChurchLocation[] = [
   {
     id: 'ch-1',
     number: 1,
-    name: 'HKBP Parserahan',
-    ressort: 'Ressort Parserahan',
-    distrik: 'Distrik IV Toba',
-    address: 'Jl. Gereja No. 12, Parserahan, Kec. Balige, Kab. Toba',
-    pastor: 'Pdt. Parluhutan Lumbantobing, S.Th',
+    name: 'HKBP Jatisampurna Wijk Parserahan',
+    ressort: 'Ressort Jatisampurna',
+    distrik: 'Distrik XIX Bekasi',
+    address: 'Jl. Raya Jatisampurna, Kec. Jatisampurna, Kota Bekasi',
+    pastor: 'Ketua Wijk: Roberth Simatupang',
     distanceKm: 0.4,
     schedules: ['Minggu Pagi (B. Indonesia): 07.30 WIB', 'Minggu Siang (B. Batak): 10.00 WIB', 'Sekolah Minggu: 08.00 WIB'],
     phone: '+62 812-6401-7712',
     mapX: 48,
     mapY: 46,
-    lat: 2.3342,
-    lng: 99.0648,
+    lat: -6.3738,
+    lng: 106.9244,
     isHomeChurch: true,
   },
   {
@@ -809,30 +811,31 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
 export const INITIAL_TIMELINE_POSTS: TimelinePost[] = [
   {
     id: 'post-1',
-    author: 'Sekretariat HKBP Parserahan',
-    role: 'Parhalado / Admin',
-    avatarInitials: 'HP',
+    author: 'Roberth Simatupang (Ketua)',
+    role: 'Admin Utama (Ketua)',
+    avatarInitials: 'RS',
+    avatarUrl: '/assets/aistudio/IMG_20261125_180232_4235f81b.jpg',
     timestamp: '2 jam yang lalu',
     category: 'Warta Jemaat',
     content:
-      'Horas di hita saluhutna! Jadwal Partangiangan Weyk I - IV minggu ini dilaksanakan pada hari Kamis pukul 19.30 WIB di rumah keluarga masing-masing tuan rumah yang telah ditetapkan. Mari hadir bersama keluarga membawa Buku Ende & Alkitab.',
+      'Horas di hita saluhutna! Jadwal Partangiangan HKBP Jatisampurna Wijk Parserahan minggu ini dilaksanakan pada hari Kamis pukul 19.30 WIB di rumah keluarga tuan rumah yang telah ditetapkan. Mari hadir bersama keluarga membawa Buku Ende & Alkitab.',
     imageUrl: ASSETS.churchParserahanHero,
     likes: 34,
     likedByMe: false,
     comments: [
-      { id: 'c1', author: 'Ny. Hutabarat br. Tobing', text: 'Horas! Kami dari Weyk II siap hadir malam Kamis.', time: '1 jam lalu' },
-      { id: 'c2', author: 'St. M. Panggabean', text: 'Tuhan memberkati persiapan tuan rumah weyk.', time: '45 mnt lalu' },
+      { id: 'c1', author: 'Ny. Hutabarat br. Tobing', text: 'Horas! Kami siap hadir pada partangiangan Kamis malam.', time: '1 jam lalu' },
+      { id: 'c2', author: 'St. M. Panggabean', text: 'Tuhan memberkati persiapan tuan rumah wijk.', time: '45 mnt lalu' },
     ],
   },
   {
     id: 'post-2',
-    author: 'NHKBP Parserahan',
+    author: 'NHKBP Jatisampurna Wijk Parserahan',
     role: 'Naposobulung',
     avatarInitials: 'NH',
     timestamp: 'Kemarin · 18:15',
     category: 'Kegiatan Pemuda',
     content:
-      'Latihan Koor Persiapan Minggu Advent I untuk Naposobulung & Remaja HKBP Parserahan berjalan dengan penuh sukacita. Bagi rekan-rekan muda yang belum bergabung, ditunggu kehadirannya setiap Sabtu pukul 17.00 WIB di Gedung Serbaguna.',
+      'Latihan Koor Persiapan Minggu Advent I untuk Naposobulung & Remaja HKBP Jatisampurna Wijk Parserahan berjalan dengan penuh sukacita. Bagi rekan-rekan muda yang belum bergabung, ditunggu kehadirannya setiap Sabtu pukul 17.00 WIB di Gedung Serbaguna.',
     likes: 27,
     likedByMe: true,
     comments: [
@@ -867,7 +870,7 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
   },
   {
     id: 'notif-2',
-    title: 'Warta Jemaat HKBP Parserahan',
+    title: 'Warta Jemaat HKBP Jatisampurna Wijk Parserahan',
     message: 'Kebaktian Minggu pagi pukul 07.30 WIB (B. Indonesia) dan pukul 10.00 WIB (B. Batak).',
     time: 'Kemarin',
     type: 'warta',

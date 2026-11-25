@@ -15,9 +15,9 @@ export default defineConfig(() => {
         includeAssets: ['icon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png', 'pwa-maskable-512x512.png'],
         manifest: {
           id: '/',
-          name: 'HKBP Parserahan',
+          name: 'HKBP Jatisampurna Wijk Parserahan',
           short_name: 'HKBP',
-          description: 'Aplikasi web jemaat HKBP Parserahan: Renungan harian, Alkitab, Buku Ende, HKBP TV, dan Kartu Identitas Digital.',
+          description: 'Aplikasi web jemaat HKBP Jatisampurna Wijk Parserahan: Renungan harian, Alkitab, Buku Ende, HKBP TV, dan Kartu Identitas Digital.',
           theme_color: '#0D47A1',
           background_color: '#f8fafc',
           display: 'standalone',

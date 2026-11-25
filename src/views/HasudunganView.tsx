@@ -24,7 +24,7 @@ export const HasudunganView: React.FC<HasudunganViewProps> = ({ onNavigate }) =>
           Hasudungan Ni Roha
         </h2>
         <p className="text-xs sm:text-sm text-blue-100/90 mt-1.5 max-w-2xl">
-          Kumpulan kisah Alkitab berbahasa Batak Toba yang disusun untuk keluarga, anak Sekolah Minggu, dan generasi muda HKBP Parserahan.
+          Kumpulan kisah Alkitab berbahasa Batak Toba yang disusun untuk keluarga, anak Sekolah Minggu, dan generasi muda HKBP Jatisampurna Wijk Parserahan.
         </p>
       </section>
 
@@ -88,7 +88,7 @@ export const HasudunganView: React.FC<HasudunganViewProps> = ({ onNavigate }) =>
               </p>
               {expandedDesc && (
                 <p className="text-sm text-slate-600 dark:text-slate-300 mt-3 leading-relaxed">
-                  Melalui ilustrasi penuh warna dan kosakata Batak yang santun, jemaat HKBP Parserahan dapat menggunakannya sebagai bahan saat teduh keluarga (partangiangan keluarga) setiap malam agar generasi muda mencintai Alkitab sekaligus melestarikan bahasa Batak.
+                  Melalui ilustrasi penuh warna dan kosakata Batak yang santun, jemaat HKBP Jatisampurna Wijk Parserahan dapat menggunakannya sebagai bahan saat teduh keluarga (partangiangan keluarga) setiap malam agar generasi muda mencintai Alkitab sekaligus melestarikan bahasa Batak.
                 </p>
               )}
             </div>

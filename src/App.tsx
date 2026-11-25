@@ -73,7 +73,7 @@ export default function App() {
   ]);
   const currentRoute = routeHistory[routeHistory.length - 1];
 
-  const [accountType, setAccountType] = useState<'jemaat' | 'admin'>('jemaat');
+  const [accountType, setAccountType] = useState<'jemaat' | 'admin'>('admin');
   const [cardTheme, setCardTheme] = useState<CardTheme>('default');
   const [appDarkMode, setAppDarkMode] = useState<boolean>(() => {
     try {
@@ -203,6 +203,7 @@ export default function App() {
         author: profile.name,
         role: profile.role,
         avatarInitials: profile.initials,
+        avatarUrl: profile.avatarUrl,
         timestamp: 'Baru saja',
         category,
         content,
@@ -379,10 +380,10 @@ export default function App() {
               ✝
             </div>
             <div className="min-w-0">
-              <span className="block text-base font-extrabold text-slate-900 dark:text-white truncate">
-                HKBP Parserahan
+              <span className="block text-sm font-extrabold text-slate-900 dark:text-white leading-tight">
+                HKBP Jatisampurna Wijk Parserahan
               </span>
-              <span className="block text-[11px] text-slate-500 dark:text-slate-400 truncate">
+              <span className="block text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
                 Portal Jemaat Digital
               </span>
             </div>

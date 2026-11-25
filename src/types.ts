@@ -136,6 +136,7 @@ export interface TimelinePost {
   author: string;
   role: string;
   avatarInitials: string;
+  avatarUrl?: string;
   timestamp: string;
   category: string;
   content: string;
@@ -164,11 +165,12 @@ export interface ReminderSettings {
 
 export interface UserProfile {
   name: string;
-  role: 'Jemaat' | 'Pengurus / Admin';
+  role: 'Jemaat' | 'Admin Utama (Ketua)';
   email: string;
   memberId: string;
   weyk: string;
   status: 'Aktif';
   verified: boolean;
   initials: string;
+  avatarUrl?: string;
 }

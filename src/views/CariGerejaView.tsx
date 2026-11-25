@@ -32,20 +32,20 @@ export const CariGerejaView: React.FC = () => {
         () => {
           setUserLocated(true);
           setSelectedChurch(CHURCH_LOCATIONS[0]);
-          setLocStatus('Lokasi terdeteksi di sekitar Balige / Parserahan');
+          setLocStatus('Lokasi terdeteksi di sekitar HKBP Jatisampurna Wijk Parserahan');
           window.setTimeout(() => setLocStatus(null), 3000);
         },
         () => {
           setUserLocated(true);
           setSelectedChurch(CHURCH_LOCATIONS[0]);
-          setLocStatus('Menampilkan titik referensi HKBP Parserahan');
+          setLocStatus('Menampilkan titik referensi HKBP Jatisampurna Wijk Parserahan');
           window.setTimeout(() => setLocStatus(null), 3000);
         },
         { timeout: 3500 }
       );
     } else {
       setUserLocated(true);
-      setLocStatus('Menampilkan area Parserahan');
+      setLocStatus('Menampilkan area HKBP Jatisampurna Wijk Parserahan');
       window.setTimeout(() => setLocStatus(null), 2500);
     }
   };
@@ -194,7 +194,7 @@ export const CariGerejaView: React.FC = () => {
                     : 'bg-white/80 text-slate-700'
                 }`}
               >
-                Kawasan Balige · Parserahan ({mapStyle})
+                Kawasan Jatisampurna · Wijk Parserahan ({mapStyle})
               </span>
 
               {/* User Location Pin */}

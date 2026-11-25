@@ -62,7 +62,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ compact = fa
               <ol className="space-y-2.5 text-sm text-slate-600 dark:text-slate-300">
                 <li>1. Ketuk tombol <strong>Bagikan (Share)</strong> pada bilah Safari.</li>
                 <li>2. Gulir ke bawah lalu ketuk <strong>Tambah ke Layar Utama (Add to Home Screen)</strong>.</li>
-                <li>3. Ketuk <strong>Tambah</strong> agar HKBP Parserahan tampil seperti aplikasi native.</li>
+                <li>3. Ketuk <strong>Tambah</strong> agar HKBP Jatisampurna Wijk Parserahan tampil seperti aplikasi native.</li>
               </ol>
               <button
                 type="button"

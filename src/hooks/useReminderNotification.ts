@@ -47,7 +47,7 @@ export function useReminderNotification(
   const triggerReminderAlert = useCallback(
     (isManualTest = false) => {
       const title = isManualTest
-        ? 'Pengingat Renungan Harian · HKBP Parserahan'
+        ? 'Pengingat Renungan Harian · HKBP Jatisampurna Wijk Parserahan'
         : `Saatnya Renungan Harian (${settings.time})`;
       const body = `${todayDevotional.readingRef} — "${todayDevotional.title}" (${todayDevotional.hymnRef})`;
 
