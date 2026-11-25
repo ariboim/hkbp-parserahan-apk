@@ -91,6 +91,31 @@ service cloud.firestore {
         data.createdAt == prev.createdAt;
     }
 
+    function isValidLiveStream(data) {
+      return data.keys().hasAll(['title', 'speaker', 'scheduleIso', 'streamUrl', 'description', 'isLive', 'updatedAt']) &&
+        data.keys().hasOnly(['title', 'speaker', 'scheduleIso', 'streamUrl', 'description', 'isLive', 'updatedAt']) &&
+        data.title is string && data.title.size() >= 3 && data.title.size() <= 140 &&
+        data.speaker is string && data.speaker.size() >= 2 && data.speaker.size() <= 120 &&
+        data.scheduleIso is string && data.scheduleIso.size() >= 10 && data.scheduleIso.size() <= 40 &&
+        data.streamUrl is string && data.streamUrl.size() >= 8 && data.streamUrl.size() <= 500 &&
+        data.streamUrl.matches('^https://.*') &&
+        data.description is string && data.description.size() <= 600 &&
+        data.isLive is bool &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidLiveMessageCreate(data) {
+      return data.keys().hasAll(['streamId', 'senderName', 'location', 'message', 'isAdmin', 'createdAt']) &&
+        data.keys().hasOnly(['streamId', 'senderName', 'location', 'message', 'isAdmin', 'createdAt']) &&
+        data.streamId is string && data.streamId == 'current' &&
+        data.senderName is string && data.senderName.size() >= 1 && data.senderName.size() <= 60 &&
+        data.location is string && data.location.size() >= 1 && data.location.size() <= 80 &&
+        data.message is string && data.message.size() >= 1 && data.message.size() <= 400 &&
+        data.isAdmin is bool &&
+        (data.isAdmin == false || isAdmin()) &&
+        data.createdAt == request.time;
+    }
+
     match /aspirations/{aspirationId} {
       allow get: if isValidId(aspirationId) && (
         isAdmin() ||
@@ -116,6 +141,21 @@ service cloud.firestore {
         isValidAdminUserUpdate(incoming(), existing()) &&
         incoming().diff(existing()).affectedKeys().hasOnly(['email', 'name', 'role']);
       allow delete: if isRootAdmin() && isValidId(adminUid);
+    }
+
+    match /livestream/{streamId} {
+      allow get: if isValidId(streamId) && streamId == 'current';
+      allow list: if false;
+      allow create, update: if isAdmin() && isValidId(streamId) && streamId == 'current' && isValidLiveStream(incoming());
+      allow delete: if isAdmin() && isValidId(streamId);
+    }
+
+    match /livestream_messages/{messageId} {
+      allow get: if isValidId(messageId);
+      allow list: if existing().streamId == 'current';
+      allow create: if isValidId(messageId) && isValidLiveMessageCreate(incoming());
+      allow update: if false;
+      allow delete: if isAdmin() && isValidId(messageId);
     }
   }
 }

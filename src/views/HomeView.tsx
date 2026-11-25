@@ -15,19 +15,27 @@ import {
   MessageSquareHeart,
   Music,
   Newspaper,
+  Radio,
   ShieldCheck,
   Sparkles,
   Tv,
   Users,
 } from 'lucide-react';
 import { ASSETS } from '../data/mockData';
-import { ActiveRoute, Devotional, ReminderSettings, UserProfile } from '../types';
+import {
+  ActiveRoute,
+  Devotional,
+  LiveStreamConfig,
+  ReminderSettings,
+  UserProfile,
+} from '../types';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import { PWAInstallButton } from '../components/PWAInstallButton';
 
 interface HomeViewProps {
   profile: UserProfile;
   devotional: Devotional;
+  liveConfig: LiveStreamConfig;
   unreadNotifications: number;
   reminderSettings: ReminderSettings;
   onOpenNotifications: () => void;
@@ -55,6 +63,7 @@ const MENU_ITEMS: MenuTile[] = [
   { id: 'donasi', label: 'Donasi', icon: HeartHandshake, bg: 'bg-pink-50 dark:bg-pink-950/60', text: 'text-pink-700 dark:text-pink-300', route: { type: 'sub', view: 'donasi' } },
   { id: 'event', label: 'Event', icon: CalendarDays, bg: 'bg-orange-50 dark:bg-orange-950/60', text: 'text-orange-700 dark:text-orange-300', route: { type: 'sub', view: 'event' } },
   { id: 'hkbp-tv', label: 'HKBP TV', icon: Tv, bg: 'bg-red-50 dark:bg-red-950/60', text: 'text-red-600 dark:text-red-300', route: { type: 'sub', view: 'hkbp-tv' } },
+  { id: 'live-streaming', label: 'Live Streaming', icon: Radio, bg: 'bg-rose-50 dark:bg-rose-950/60', text: 'text-rose-600 dark:text-rose-300', route: { type: 'sub', view: 'live-streaming' } },
   { id: 'aspirasi', label: 'Aspirasi', icon: MessageSquareHeart, bg: 'bg-blue-50 dark:bg-blue-950/60', text: 'text-blue-700 dark:text-blue-300', route: { type: 'sub', view: 'aspirasi' } },
   { id: 'hasudungan', label: 'Cerita Alkitab', icon: BookMarked, bg: 'bg-lime-50 dark:bg-lime-950/60', text: 'text-lime-700 dark:text-lime-300', route: { type: 'sub', view: 'hasudungan' } },
   { id: 'game', label: 'Game HKBP', icon: Gamepad2, bg: 'bg-purple-50 dark:bg-purple-950/60', text: 'text-purple-700 dark:text-purple-300', route: { type: 'sub', view: 'game' } },
@@ -64,6 +73,7 @@ const MENU_ITEMS: MenuTile[] = [
 export const HomeView: React.FC<HomeViewProps> = ({
   profile,
   devotional,
+  liveConfig,
   unreadNotifications,
   reminderSettings,
   onOpenNotifications,
@@ -130,6 +140,32 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <PWAInstallButton compact />
         </div>
       </header>
+
+      {/* Real-Time Live Streaming Banner when Live */}
+      {liveConfig.isLive && (
+        <button
+          type="button"
+          onClick={() => onNavigate({ type: 'sub', view: 'live-streaming' })}
+          className="w-full text-left rounded-3xl bg-gradient-to-r from-rose-600 via-rose-600 to-red-700 text-white p-4 sm:p-5 shadow-md hover:brightness-105 transition-all flex flex-wrap items-center justify-between gap-4"
+        >
+          <div className="min-w-0 flex-1 space-y-1">
+            <div className="inline-flex items-center gap-2 text-xs font-extrabold tracking-wide text-rose-100">
+              <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse" />
+              <span>SEDANG LIVE SEKARANG · JEMAAT LUAR KOTA & LUAR NEGERI</span>
+            </div>
+            <h2 className="text-base sm:text-lg font-extrabold leading-snug">
+              {liveConfig.title}
+            </h2>
+            <p className="text-xs text-rose-100 truncate">
+              {liveConfig.speaker} · Klik untuk menyaksikan & kirim sapaan live
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white text-rose-700 text-xs font-extrabold shrink-0 shadow-xs">
+            <Radio className="w-4 h-4" />
+            <span>Tonton Live</span>
+          </span>
+        </button>
+      )}
 
       {/* Main Responsive Split on Desktop: Renungan + Highlights */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -248,7 +284,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             MENU UTAMA
           </h2>
           <span className="text-xs text-slate-500 dark:text-slate-400">
-            15 Layanan Jemaat
+            16 Layanan Jemaat
           </span>
         </div>
 

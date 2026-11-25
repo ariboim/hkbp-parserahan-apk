@@ -15,7 +15,8 @@ export type SubView =
   | 'donasi'
   | 'event'
   | 'aspirasi'
-  | 'admin-aspirasi';
+  | 'admin-aspirasi'
+  | 'live-streaming';
 
 export type ActiveRoute =
   | { type: 'tab'; tab: MainTab }
@@ -191,3 +192,22 @@ export interface AspirationRecord {
   updatedAtMs?: number;
 }
 
+export interface LiveStreamConfig {
+  title: string;
+  speaker: string;
+  scheduleIso: string;
+  streamUrl: string;
+  description: string;
+  isLive: boolean;
+  updatedAtMs?: number;
+}
+
+export interface LiveMessageRecord {
+  id: string;
+  streamId: string;
+  senderName: string;
+  location: string;
+  message: string;
+  isAdmin: boolean;
+  createdAtMs: number;
+}

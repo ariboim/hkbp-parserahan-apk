@@ -16,10 +16,18 @@ import {
   INITIAL_TIMELINE_POSTS,
   TODAY_DEVOTIONAL,
 } from './data/mockData';
+import { doc, onSnapshot, type Timestamp } from 'firebase/firestore';
+import {
+  db,
+  DEFAULT_LIVESTREAM_CONFIG,
+  handleFirestoreError,
+  OperationType,
+} from './firebase';
 import {
   ActiveRoute,
   AppNotification,
   CardTheme,
+  LiveStreamConfig,
   MainTab,
   SubView,
   TimelinePost,
@@ -43,6 +51,7 @@ import { CariGerejaView } from './views/CariGerejaView';
 import { GameView } from './views/GameView';
 import { ServicesViews } from './views/ServicesViews';
 import { AdminDashboardView } from './views/AdminDashboardView';
+import { LiveStreamView } from './views/LiveStreamView';
 
 const SUBVIEW_TITLES: Record<SubView, string> = {
   renungan: 'Renungan Hari Ini',
@@ -60,6 +69,7 @@ const SUBVIEW_TITLES: Record<SubView, string> = {
   event: 'Event Jemaat',
   aspirasi: 'Aspirasi Jemaat',
   'admin-aspirasi': 'Dashboard Admin Aspirasi',
+  'live-streaming': 'Live Streaming Ibadah',
 };
 
 export default function App() {
@@ -101,8 +111,49 @@ export default function App() {
   const [notifDrawerOpen, setNotifDrawerOpen] = useState(false);
   const [adminToken, setAdminToken] = useState<string | null>(null);
   const [adminUsername, setAdminUsername] = useState<string | null>(null);
+  const [liveConfig, setLiveConfig] = useState<LiveStreamConfig>(DEFAULT_LIVESTREAM_CONFIG);
+  const [loadingLiveConfig, setLoadingLiveConfig] = useState<boolean>(true);
 
   const profile = DEMO_PROFILES[accountType];
+
+  useEffect(() => {
+    const unsub = onSnapshot(
+      doc(db, 'livestream', 'current'),
+      (snap) => {
+        if (snap.exists()) {
+          const d = snap.data() as {
+            title?: string;
+            speaker?: string;
+            scheduleIso?: string;
+            streamUrl?: string;
+            description?: string;
+            isLive?: boolean;
+            updatedAt?: Timestamp | null;
+          };
+          setLiveConfig({
+            title: d.title || DEFAULT_LIVESTREAM_CONFIG.title,
+            speaker: d.speaker || DEFAULT_LIVESTREAM_CONFIG.speaker,
+            scheduleIso: d.scheduleIso || DEFAULT_LIVESTREAM_CONFIG.scheduleIso,
+            streamUrl: d.streamUrl || DEFAULT_LIVESTREAM_CONFIG.streamUrl,
+            description:
+              typeof d.description === 'string'
+                ? d.description
+                : DEFAULT_LIVESTREAM_CONFIG.description,
+            isLive: Boolean(d.isLive),
+            updatedAtMs: d.updatedAt ? d.updatedAt.toMillis() : undefined,
+          });
+        } else {
+          setLiveConfig(DEFAULT_LIVESTREAM_CONFIG);
+        }
+        setLoadingLiveConfig(false);
+      },
+      (error) => {
+        setLoadingLiveConfig(false);
+        handleFirestoreError(error, OperationType.GET, 'livestream/current');
+      }
+    );
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', appDarkMode);
@@ -264,6 +315,7 @@ export default function App() {
             <HomeView
               profile={profile}
               devotional={TODAY_DEVOTIONAL}
+              liveConfig={liveConfig}
               unreadNotifications={unreadCount}
               reminderSettings={reminder.settings}
               onOpenNotifications={() => setNotifDrawerOpen(true)}
@@ -361,7 +413,19 @@ export default function App() {
           />
         );
       case 'hkbp-tv':
-        return <HkbpTvView />;
+        return (
+          <HkbpTvView
+            onOpenLiveStream={() => navigate({ type: 'sub', view: 'live-streaming' })}
+          />
+        );
+      case 'live-streaming':
+        return (
+          <LiveStreamView
+            profile={profile}
+            liveConfig={liveConfig}
+            loadingConfig={loadingLiveConfig}
+          />
+        );
       case 'cari-gereja':
         return <CariGerejaView />;
       case 'game':

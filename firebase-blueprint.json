@@ -60,7 +60,7 @@
     },
     "AdminUser": {
       "title": "AdminUser",
-      "description": "Daftar pengguna admin terotorisasi untuk memantau seluruh aspirasi jemaat.",
+      "description": "Daftar pengguna admin terotorisasi untuk memantau seluruh aspirasi jemaat dan live streaming.",
       "type": "object",
       "properties": {
         "email": {
@@ -87,6 +87,93 @@
         }
       },
       "required": ["email", "name", "role", "createdAt"]
+    },
+    "LiveStreamConfig": {
+      "title": "LiveStreamConfig",
+      "description": "Konfigurasi siaran langsung acara HKBP Jatisampurna Wijk Parserahan untuk jemaat luar kota dan luar negeri.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 140,
+          "description": "Judul acara atau ibadah yang disiarkan langsung."
+        },
+        "speaker": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Pengkhotbah, pembawa acara, atau penyelenggara."
+        },
+        "scheduleIso": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 40,
+          "description": "Waktu acara dalam format ISO 8601 agar otomatis dikonversi ke zona waktu lokal jemaat."
+        },
+        "streamUrl": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 500,
+          "description": "Tautan YouTube Live atau video siaran langsung (HTTPS)."
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 600,
+          "description": "Keterangan singkat acara, liturgi, atau tata ibadah."
+        },
+        "isLive": {
+          "type": "boolean",
+          "description": "Status apakah siaran sedang berlangsung secara langsung."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu server saat konfigurasi live diperbarui admin."
+        }
+      },
+      "required": ["title", "speaker", "scheduleIso", "streamUrl", "description", "isLive", "updatedAt"]
+    },
+    "LiveMessage": {
+      "title": "LiveMessage",
+      "description": "Sapaan langsung dan pokok doa dari jemaat di luar kota maupun luar negeri saat mengikuti siaran live.",
+      "type": "object",
+      "properties": {
+        "streamId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "description": "ID siaran langsung target (misalnya 'current')."
+        },
+        "senderName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60,
+          "description": "Nama jemaat yang menyapa."
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "description": "Kota atau negara tempat jemaat berada."
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 400,
+          "description": "Pesan sapaan, ucapan syukur, atau doa."
+        },
+        "isAdmin": {
+          "type": "boolean",
+          "description": "Penanda apakah pesan dikirim oleh Admin Utama."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu server saat pesan dikirim."
+        }
+      },
+      "required": ["streamId", "senderName", "location", "message", "isAdmin", "createdAt"]
     }
   },
   "firestore": {
@@ -100,7 +187,19 @@
       "schema": {
         "$ref": "#/entities/AdminUser"
       },
-      "description": "Koleksi admin terotorisasi yang berhak membaca dan menindaklanjuti aspirasi."
+      "description": "Koleksi admin terotorisasi yang berhak membaca dan menindaklanjuti aspirasi serta mengelola siaran live."
+    },
+    "/livestream/{streamId}": {
+      "schema": {
+        "$ref": "#/entities/LiveStreamConfig"
+      },
+      "description": "Dokumen status dan tautan siaran langsung acara gereja."
+    },
+    "/livestream_messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/LiveMessage"
+      },
+      "description": "Sapaan langsung dan interaksi jemaat selama acara live streaming."
     }
   }
 }

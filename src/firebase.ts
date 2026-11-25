@@ -31,6 +31,94 @@ export const ASPIRATION_LIMITS = {
   adminNoteMax: 500,
 } as const;
 
+export const LIVESTREAM_LIMITS = {
+  titleMin: 3,
+  titleMax: 140,
+  speakerMin: 2,
+  speakerMax: 120,
+  scheduleMin: 10,
+  scheduleMax: 40,
+  urlMin: 8,
+  urlMax: 500,
+  descMax: 600,
+  senderNameMin: 1,
+  senderNameMax: 60,
+  locationMin: 1,
+  locationMax: 80,
+  messageMin: 1,
+  messageMax: 400,
+} as const;
+
+export const DEFAULT_LIVESTREAM_CONFIG = {
+  title: 'Ibadah Minggu Live · HKBP Jatisampurna Wijk Parserahan',
+  speaker: 'Pelayan Ibadah HKBP Jatisampurna',
+  scheduleIso: '2026-11-29T10:00:00+07:00',
+  streamUrl: 'https://www.youtube.com/@HKBPOfficial/live',
+  description:
+    'Siaran langsung ibadah dan acara khusus HKBP Jatisampurna Wijk Parserahan bagi jemaat di luar kota maupun di luar negeri.',
+  isLive: false,
+} as const;
+
+export function isSafeHttpsUrl(rawUrl: string): boolean {
+  try {
+    const parsed = new URL(rawUrl.trim());
+    return parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
+
+export function getYouTubeEmbedUrl(rawUrl: string): string | null {
+  try {
+    const parsed = new URL(rawUrl.trim());
+    if (parsed.protocol !== 'https:') return null;
+    const host = parsed.hostname.toLowerCase();
+    const idRegex = /^[a-zA-Z0-9_-]{6,20}$/;
+
+    if (host === 'youtu.be') {
+      const id = parsed.pathname.replace(/^\/+/, '').split('/')[0] || '';
+      return idRegex.test(id)
+        ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`
+        : null;
+    }
+
+    if (
+      host === 'youtube.com' ||
+      host === 'www.youtube.com' ||
+      host === 'm.youtube.com' ||
+      host === 'youtube-nocookie.com' ||
+      host === 'www.youtube-nocookie.com'
+    ) {
+      if (parsed.pathname === '/watch') {
+        const v = parsed.searchParams.get('v') || '';
+        return idRegex.test(v)
+          ? `https://www.youtube.com/embed/${v}?rel=0&modestbranding=1`
+          : null;
+      }
+
+      if (parsed.pathname === '/embed/live_stream') {
+        const ch = parsed.searchParams.get('channel') || '';
+        return /^[a-zA-Z0-9_-]{10,40}$/.test(ch)
+          ? `https://www.youtube.com/embed/live_stream?channel=${ch}`
+          : null;
+      }
+
+      const parts = parsed.pathname.split('/').filter(Boolean);
+      if (
+        parts.length >= 2 &&
+        (parts[0] === 'live' || parts[0] === 'embed' || parts[0] === 'shorts') &&
+        idRegex.test(parts[1])
+      ) {
+        return `https://www.youtube.com/embed/${parts[1]}?rel=0&modestbranding=1`;
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export enum OperationType {
   CREATE = 'create',
   UPDATE = 'update',

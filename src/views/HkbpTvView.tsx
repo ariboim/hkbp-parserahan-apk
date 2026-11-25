@@ -1,12 +1,16 @@
 import React, { useMemo, useState } from 'react';
-import { Calendar, ExternalLink, Pause, Play, Tv } from 'lucide-react';
+import { Calendar, ExternalLink, Pause, Play, Radio, Tv } from 'lucide-react';
 import { HKBP_TV_VIDEOS } from '../data/mockData';
 import { ImageWithFallback } from '../components/ImageWithFallback';
+
+interface HkbpTvViewProps {
+  onOpenLiveStream?: () => void;
+}
 
 const CATEGORIES = ['HKBP TV', 'Karaoke', 'Instrumentalia'] as const;
 const SUB_TABS = ['Semua', 'Studio HKBP', 'Khotbah Minggu'] as const;
 
-export const HkbpTvView: React.FC = () => {
+export const HkbpTvView: React.FC<HkbpTvViewProps> = ({ onOpenLiveStream }) => {
   const [category, setCategory] = useState<(typeof CATEGORIES)[number]>('HKBP TV');
   const [subTab, setSubTab] = useState<(typeof SUB_TABS)[number]>('Semua');
   const [activeVideoId, setActiveVideoId] = useState<string>(HKBP_TV_VIDEOS[0].id);
@@ -37,11 +41,26 @@ export const HkbpTvView: React.FC = () => {
     <div className="space-y-6 pb-8">
       {/* Header */}
       <section className="rounded-3xl bg-gradient-to-br from-[#0D47A1] to-[#1565C0] text-white p-5 sm:p-6 shadow-sm">
-        <div className="flex items-center gap-2 text-blue-100 text-xs font-semibold">
-          <Tv className="w-4 h-4" />
-          <span>Kanal Video Resmi HKBP</span>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2 text-blue-100 text-xs font-semibold">
+              <Tv className="w-4 h-4" />
+              <span>Kanal Video Resmi HKBP</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-extrabold mt-1">HKBP TV</h1>
+          </div>
+
+          {onOpenLiveStream && (
+            <button
+              type="button"
+              onClick={onOpenLiveStream}
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-extrabold min-h-[42px] shadow-sm transition-colors"
+            >
+              <Radio className="w-4 h-4" />
+              <span>Buka Live Streaming Ibadah</span>
+            </button>
+          )}
         </div>
-        <h1 className="text-xl sm:text-2xl font-extrabold mt-1">HKBP TV</h1>
 
         {/* Category Tabs */}
         <div className="mt-4 flex flex-wrap items-center gap-2">

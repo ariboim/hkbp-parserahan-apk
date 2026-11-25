@@ -6,6 +6,8 @@
 3. Pengirim publik tidak dapat membaca (`get` / `list`) dokumen aspirasi milik jemaat lain. Hanya Admin Utama terverifikasi (`isRootAdmin()` / `isAdmin()`) atau pemilik `authorUid` yang dapat membaca dokumen miliknya.
 4. Perubahan (`update`) dan penghapusan (`delete`) pada `/aspirations/{aspirationId}` hanya diizinkan bagi Admin Utama terverifikasi, dengan `senderName`, `weyk`, `subject`, `message`, dan `createdAt` bersifat immutable.
 5. Dokumen pada `/admins/{adminUid}` hanya dapat dikelola oleh root admin terverifikasi (`email_verified == true`).
+6. Dokumen konfigurasi `/livestream/current` dapat dibaca (`get`) oleh jemaat secara langsung, namun tidak dapat di-`list` secara massal dan hanya dapat dibuat/diubah/dihapus oleh Admin Utama terverifikasi dengan `streamUrl` berawalan `https://` serta `updatedAt == request.time`.
+7. Dokumen `/livestream_messages/{messageId}` hanya mengizinkan `create` untuk `streamId == 'current'` dengan `createdAt == request.time` dan `isAdmin == false` kecuali pengirim adalah Admin terverifikasi; `update` dilarang (`false`), `list` terbatas pada `streamId == 'current'`, dan `delete` khusus Admin.
 
 ## 2. The "Dirty Dozen" Payloads (Expected: PERMISSION_DENIED)
 1. **Shadow Field Injection on Create**: `{ "senderName": "Budi", "weyk": "Wijk Parserahan", "subject": "Masukan", "message": "Tes masukan beta", "status": "Baru", "isAdmin": true, "createdAt": "<request.time>" }` -> Rejected by `hasOnly(...)`.
@@ -20,3 +22,6 @@
 10. **Non-Admin Status Tampering**: `update('/aspirations/asp-1', { status: 'Selesai', updatedAt: '<request.time>' })` as regular user -> Rejected.
 11. **Immutable Message Mutation by Admin**: `update('/aspirations/asp-1', { message: 'Edited message', status: 'Dibaca', updatedAt: '<request.time>' })` -> Rejected by `affectedKeys().hasOnly(['status', 'adminNote', 'updatedAt'])`.
 12. **Self-Assigned Admin Escalation**: `create('/admins/attackerUid', { email: 'attacker@example.com', name: 'Attacker', role: 'Admin Utama (Ketua)', createdAt: '<request.time>' })` -> Rejected.
+13. **Non-Admin Live Stream Hijack**: `update('/livestream/current', { title: 'Fake', speaker: 'X', scheduleIso: '2026-11-29T10:00:00+07:00', streamUrl: 'https://youtube.com/watch?v=123', description: 'x', isLive: true, updatedAt: '<request.time>' })` as non-admin -> Rejected.
+14. **Insecure Non-HTTPS Stream URL Injection**: `update('/livestream/current', { ..., streamUrl: 'javascript:alert(1)', ... })` -> Rejected by `streamUrl.matches('^https://.*')`.
+15. **Live Chat Admin Badge Spoofing**: `create('/livestream_messages/msg-1', { streamId: 'current', senderName: 'Tamu', location: 'Berlin', message: 'Syalom', isAdmin: true, createdAt: '<request.time>' })` as non-admin -> Rejected (`isAdmin == false || isAdmin()`).
