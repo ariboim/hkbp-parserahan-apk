@@ -4,7 +4,8 @@ import { CardTheme, ReminderSettings, UserProfile } from '../types';
 import { DigitalIdCard } from '../components/DigitalIdCard';
 import { PWAInstallButton } from '../components/PWAInstallButton';
 
-export const PUBLIC_BETA_URL = 'https://ais-pre-gvgvciqeeotukjx2hl4cp4-963636008472.asia-southeast1.run.app';
+export const getShareBetaUrl = () =>
+  typeof window !== 'undefined' ? window.location.origin : 'https://ais-dev-gvgvciqeeotukjx2hl4cp4-963636008472.asia-southeast1.run.app';
 
 interface ProfilViewProps {
   profile: UserProfile;
@@ -34,16 +35,17 @@ export const ProfilView: React.FC<ProfilViewProps> = ({
   const [copiedLink, setCopiedLink] = useState(false);
 
   const handleShareBetaLink = () => {
+    const shareUrl = getShareBetaUrl();
     if (navigator.share) {
       navigator
         .share({
           title: 'HKBP Parserahan (Beta)',
           text: 'Coba aplikasi beta HKBP Parserahan dan berikan masukan untuk finalisasi terbaik:',
-          url: PUBLIC_BETA_URL,
+          url: shareUrl,
         })
         .catch(() => {});
     } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(PUBLIC_BETA_URL).catch(() => {});
+      navigator.clipboard.writeText(shareUrl).catch(() => {});
     }
     setCopiedLink(true);
     window.setTimeout(() => setCopiedLink(false), 2500);
