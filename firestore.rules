@@ -116,6 +116,32 @@ service cloud.firestore {
         data.createdAt == request.time;
     }
 
+    function isValidWijkMemberCreate(data) {
+      return data.keys().hasAll(['rhjNumber', 'memberName', 'spouseName', 'childrenNames', 'address', 'whatsappNumber', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['rhjNumber', 'memberName', 'spouseName', 'childrenNames', 'address', 'whatsappNumber', 'createdAt', 'updatedAt']) &&
+        data.rhjNumber is string && data.rhjNumber.size() >= 1 && data.rhjNumber.size() <= 50 &&
+        data.memberName is string && data.memberName.size() >= 1 && data.memberName.size() <= 100 &&
+        data.spouseName is string && data.spouseName.size() <= 100 &&
+        data.childrenNames is string && data.childrenNames.size() <= 300 &&
+        data.address is string && data.address.size() >= 1 && data.address.size() <= 300 &&
+        data.whatsappNumber is string && data.whatsappNumber.size() >= 5 && data.whatsappNumber.size() <= 30 &&
+        data.createdAt == request.time &&
+        data.updatedAt == request.time;
+    }
+
+    function isValidWijkMemberUpdate(data, prev) {
+      return data.keys().hasAll(['rhjNumber', 'memberName', 'spouseName', 'childrenNames', 'address', 'whatsappNumber', 'createdAt', 'updatedAt']) &&
+        data.keys().hasOnly(['rhjNumber', 'memberName', 'spouseName', 'childrenNames', 'address', 'whatsappNumber', 'createdAt', 'updatedAt']) &&
+        data.rhjNumber is string && data.rhjNumber.size() >= 1 && data.rhjNumber.size() <= 50 &&
+        data.memberName is string && data.memberName.size() >= 1 && data.memberName.size() <= 100 &&
+        data.spouseName is string && data.spouseName.size() <= 100 &&
+        data.childrenNames is string && data.childrenNames.size() <= 300 &&
+        data.address is string && data.address.size() >= 1 && data.address.size() <= 300 &&
+        data.whatsappNumber is string && data.whatsappNumber.size() >= 5 && data.whatsappNumber.size() <= 30 &&
+        data.createdAt == prev.createdAt &&
+        data.updatedAt == request.time;
+    }
+
     match /aspirations/{aspirationId} {
       allow get: if isValidId(aspirationId) && (
         isAdmin() ||
@@ -156,6 +182,17 @@ service cloud.firestore {
       allow create: if isValidId(messageId) && isValidLiveMessageCreate(incoming());
       allow update: if false;
       allow delete: if isAdmin() && isValidId(messageId);
+    }
+
+    match /wijk_members/{memberId} {
+      allow get: if isAdmin() && isValidId(memberId);
+      allow list: if isRootAdmin();
+      allow create: if isAdmin() && isValidId(memberId) && isValidWijkMemberCreate(incoming());
+      allow update: if isAdmin() &&
+        isValidId(memberId) &&
+        isValidWijkMemberUpdate(incoming(), existing()) &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['rhjNumber', 'memberName', 'spouseName', 'childrenNames', 'address', 'whatsappNumber', 'updatedAt']);
+      allow delete: if isAdmin() && isValidId(memberId);
     }
   }
 }

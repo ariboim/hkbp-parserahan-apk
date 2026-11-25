@@ -49,6 +49,30 @@ export const LIVESTREAM_LIMITS = {
   messageMax: 400,
 } as const;
 
+export const WIJK_MEMBER_LIMITS = {
+  rhjNumberMin: 1,
+  rhjNumberMax: 50,
+  memberNameMin: 1,
+  memberNameMax: 100,
+  spouseNameMax: 100,
+  childrenNamesMax: 300,
+  addressMin: 1,
+  addressMax: 300,
+  whatsappMin: 5,
+  whatsappMax: 30,
+} as const;
+
+export function formatWhatsappUrl(rawPhone: string): string | null {
+  const digits = rawPhone.replace(/[^\d]/g, '');
+  if (digits.length < 7) return null;
+  const normalized = digits.startsWith('0')
+    ? `62${digits.slice(1)}`
+    : digits.startsWith('8')
+    ? `62${digits}`
+    : digits;
+  return `https://wa.me/${normalized}`;
+}
+
 export const DEFAULT_LIVESTREAM_CONFIG = {
   title: 'Ibadah Minggu Live · HKBP Jatisampurna Wijk Parserahan',
   speaker: 'Pelayan Ibadah HKBP Jatisampurna',

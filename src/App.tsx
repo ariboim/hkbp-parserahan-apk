@@ -52,6 +52,7 @@ import { GameView } from './views/GameView';
 import { ServicesViews } from './views/ServicesViews';
 import { AdminDashboardView } from './views/AdminDashboardView';
 import { LiveStreamView } from './views/LiveStreamView';
+import { DaftarAnggotaView } from './views/DaftarAnggotaView';
 
 const SUBVIEW_TITLES: Record<SubView, string> = {
   renungan: 'Renungan Hari Ini',
@@ -70,6 +71,7 @@ const SUBVIEW_TITLES: Record<SubView, string> = {
   aspirasi: 'Aspirasi Jemaat',
   'admin-aspirasi': 'Dashboard Admin Aspirasi',
   'live-streaming': 'Live Streaming Ibadah',
+  'daftar-anggota': 'Daftar Anggota Wijk',
 };
 
 export default function App() {
@@ -424,6 +426,13 @@ export default function App() {
             profile={profile}
             liveConfig={liveConfig}
             loadingConfig={loadingLiveConfig}
+          />
+        );
+      case 'daftar-anggota':
+        return (
+          <DaftarAnggotaView
+            adminToken={adminToken}
+            onOpenAdminLogin={() => navigate({ type: 'sub', view: 'admin-aspirasi' })}
           />
         );
       case 'cari-gereja':

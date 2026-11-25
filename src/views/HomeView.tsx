@@ -8,6 +8,7 @@ import {
   CalendarDays,
   CheckCircle2,
   ChevronRight,
+  ClipboardList,
   Gamepad2,
   GraduationCap,
   HeartHandshake,
@@ -58,6 +59,7 @@ const MENU_ITEMS: MenuTile[] = [
   { id: 'pengajaran', label: 'Pengajaran', icon: GraduationCap, bg: 'bg-amber-50 dark:bg-amber-950/60', text: 'text-amber-700 dark:text-amber-300', route: { type: 'sub', view: 'pengajaran' } },
   { id: 'media', label: 'Media', icon: Newspaper, bg: 'bg-teal-50 dark:bg-teal-950/60', text: 'text-teal-700 dark:text-teal-300', route: { type: 'sub', view: 'media' } },
   { id: 'organisasi', label: 'Organisasi', icon: Users, bg: 'bg-violet-50 dark:bg-violet-950/60', text: 'text-violet-700 dark:text-violet-300', route: { type: 'sub', view: 'organisasi' } },
+  { id: 'daftar-anggota', label: 'Daftar Anggota', icon: ClipboardList, bg: 'bg-emerald-50 dark:bg-emerald-950/60', text: 'text-emerald-700 dark:text-emerald-300', route: { type: 'sub', view: 'daftar-anggota' } },
   { id: 'cari-gereja', label: 'Cari Gereja', icon: MapPin, bg: 'bg-emerald-50 dark:bg-emerald-950/60', text: 'text-emerald-700 dark:text-emerald-300', route: { type: 'sub', view: 'cari-gereja' } },
   { id: 'absensi', label: 'Absensi', icon: CheckCircle2, bg: 'bg-cyan-50 dark:bg-cyan-950/60', text: 'text-cyan-700 dark:text-cyan-300', route: { type: 'sub', view: 'absensi' } },
   { id: 'donasi', label: 'Donasi', icon: HeartHandshake, bg: 'bg-pink-50 dark:bg-pink-950/60', text: 'text-pink-700 dark:text-pink-300', route: { type: 'sub', view: 'donasi' } },
@@ -284,7 +286,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             MENU UTAMA
           </h2>
           <span className="text-xs text-slate-500 dark:text-slate-400">
-            16 Layanan Jemaat
+            17 Layanan Jemaat
           </span>
         </div>
 

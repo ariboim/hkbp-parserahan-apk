@@ -16,7 +16,8 @@ export type SubView =
   | 'event'
   | 'aspirasi'
   | 'admin-aspirasi'
-  | 'live-streaming';
+  | 'live-streaming'
+  | 'daftar-anggota';
 
 export type ActiveRoute =
   | { type: 'tab'; tab: MainTab }
@@ -211,3 +212,19 @@ export interface LiveMessageRecord {
   isAdmin: boolean;
   createdAtMs: number;
 }
+
+export interface WijkMemberInput {
+  rhjNumber: string;
+  memberName: string;
+  spouseName: string;
+  childrenNames: string;
+  address: string;
+  whatsappNumber: string;
+}
+
+export interface WijkMemberRecord extends WijkMemberInput {
+  id: string;
+  createdAtMs: number;
+  updatedAtMs: number;
+}
+

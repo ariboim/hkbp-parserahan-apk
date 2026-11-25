@@ -15,6 +15,7 @@ import {
   Search,
   ShieldCheck,
   Trash2,
+  Users,
 } from 'lucide-react';
 import { onAuthStateChanged, type User } from 'firebase/auth';
 import {
@@ -48,6 +49,7 @@ import {
   AspirationStatus,
   LiveMessageRecord,
 } from '../types';
+import { WijkMembersManager } from '../components/WijkMembersManager';
 
 interface AdminDashboardViewProps {
   adminToken: string | null;
@@ -98,7 +100,7 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
   const [googleAuthBusy, setGoogleAuthBusy] = useState(false);
   const [googleAuthError, setGoogleAuthError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'aspirasi' | 'livestream'>('aspirasi');
+  const [activeTab, setActiveTab] = useState<'aspirasi' | 'anggota' | 'livestream'>('aspirasi');
 
   const [aspirations, setAspirations] = useState<AspirationRecord[]>([]);
   const [loadingList, setLoadingList] = useState(false);
@@ -642,6 +644,18 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
             </button>
             <button
               type="button"
+              onClick={() => setActiveTab('anggota')}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold min-h-[42px] transition-colors ${
+                activeTab === 'anggota'
+                  ? 'bg-[#0D47A1] text-white shadow-xs'
+                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>Daftar Anggota Wijk</span>
+            </button>
+            <button
+              type="button"
               onClick={() => setActiveTab('livestream')}
               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold min-h-[42px] transition-colors ${
                 activeTab === 'livestream'
@@ -659,7 +673,9 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
             </button>
           </div>
 
-          {activeTab === 'livestream' ? (
+          {activeTab === 'anggota' ? (
+            <WijkMembersManager isAdminAuthorized={isGoogleAdminAuthorized} />
+          ) : activeTab === 'livestream' ? (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
               <form
                 onSubmit={handleSaveLiveStream}

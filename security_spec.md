@@ -8,6 +8,7 @@
 5. Dokumen pada `/admins/{adminUid}` hanya dapat dikelola oleh root admin terverifikasi (`email_verified == true`).
 6. Dokumen konfigurasi `/livestream/current` dapat dibaca (`get`) oleh jemaat secara langsung, namun tidak dapat di-`list` secara massal dan hanya dapat dibuat/diubah/dihapus oleh Admin Utama terverifikasi dengan `streamUrl` berawalan `https://` serta `updatedAt == request.time`.
 7. Dokumen `/livestream_messages/{messageId}` hanya mengizinkan `create` untuk `streamId == 'current'` dengan `createdAt == request.time` dan `isAdmin == false` kecuali pengirim adalah Admin terverifikasi; `update` dilarang (`false`), `list` terbatas pada `streamId == 'current'`, dan `delete` khusus Admin.
+8. Dokumen `/wijk_members/{memberId}` menyimpan data PII jemaat (nomor RHJ, nama anggota/keluarga, alamat, nomor WhatsApp) sehingga akses `get`, `list`, `create`, `update`, dan `delete` hanya diizinkan bagi Admin terverifikasi dengan `createdAt` immutable dan `updatedAt == request.time`.
 
 ## 2. The "Dirty Dozen" Payloads (Expected: PERMISSION_DENIED)
 1. **Shadow Field Injection on Create**: `{ "senderName": "Budi", "weyk": "Wijk Parserahan", "subject": "Masukan", "message": "Tes masukan beta", "status": "Baru", "isAdmin": true, "createdAt": "<request.time>" }` -> Rejected by `hasOnly(...)`.
@@ -25,3 +26,6 @@
 13. **Non-Admin Live Stream Hijack**: `update('/livestream/current', { title: 'Fake', speaker: 'X', scheduleIso: '2026-11-29T10:00:00+07:00', streamUrl: 'https://youtube.com/watch?v=123', description: 'x', isLive: true, updatedAt: '<request.time>' })` as non-admin -> Rejected.
 14. **Insecure Non-HTTPS Stream URL Injection**: `update('/livestream/current', { ..., streamUrl: 'javascript:alert(1)', ... })` -> Rejected by `streamUrl.matches('^https://.*')`.
 15. **Live Chat Admin Badge Spoofing**: `create('/livestream_messages/msg-1', { streamId: 'current', senderName: 'Tamu', location: 'Berlin', message: 'Syalom', isAdmin: true, createdAt: '<request.time>' })` as non-admin -> Rejected (`isAdmin == false || isAdmin()`).
+16. **Unauthorized PII Blanket Read on Wijk Members**: `list('/wijk_members')` or `get('/wijk_members/m1')` as unauthenticated or regular user -> Rejected (`isRootAdmin()` / `isAdmin()`).
+17. **Non-Admin Wijk Member Tampering**: `create('/wijk_members/m1', { ... })` or `update('/wijk_members/m1', { ... })` as regular user -> Rejected.
+18. **Immutable createdAt Tampering on Wijk Member Update**: `update('/wijk_members/m1', { createdAt: '2020-01-01T00:00:00Z', updatedAt: '<request.time>' })` -> Rejected (`createdAt == prev.createdAt`).
