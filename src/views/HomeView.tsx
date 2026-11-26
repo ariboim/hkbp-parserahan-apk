@@ -21,6 +21,7 @@ import {
   Sparkles,
   Tv,
   Users,
+  Wallet,
 } from 'lucide-react';
 import { ASSETS } from '../data/mockData';
 import {
@@ -64,6 +65,7 @@ const MENU_ITEMS: MenuTile[] = [
   { id: 'cari-gereja', label: 'Cari Gereja', icon: MapPin, bg: 'bg-emerald-50 dark:bg-emerald-950/60', text: 'text-emerald-700 dark:text-emerald-300', route: { type: 'sub', view: 'cari-gereja' } },
   { id: 'absensi', label: 'Absensi', icon: CheckCircle2, bg: 'bg-cyan-50 dark:bg-cyan-950/60', text: 'text-cyan-700 dark:text-cyan-300', route: { type: 'sub', view: 'absensi' } },
   { id: 'donasi', label: 'Donasi', icon: HeartHandshake, bg: 'bg-pink-50 dark:bg-pink-950/60', text: 'text-pink-700 dark:text-pink-300', route: { type: 'sub', view: 'donasi' } },
+  { id: 'warta-keuangan', label: 'Warta Keuangan', icon: Wallet, bg: 'bg-blue-50 dark:bg-blue-950/60', text: 'text-[#0D47A1] dark:text-blue-300', route: { type: 'sub', view: 'warta-keuangan' } },
   { id: 'event', label: 'Event', icon: CalendarDays, bg: 'bg-orange-50 dark:bg-orange-950/60', text: 'text-orange-700 dark:text-orange-300', route: { type: 'sub', view: 'event' } },
   { id: 'hkbp-tv', label: 'HKBP TV', icon: Tv, bg: 'bg-red-50 dark:bg-red-950/60', text: 'text-red-600 dark:text-red-300', route: { type: 'sub', view: 'hkbp-tv' } },
   { id: 'live-streaming', label: 'Live Streaming', icon: Radio, bg: 'bg-rose-50 dark:bg-rose-950/60', text: 'text-rose-600 dark:text-rose-300', route: { type: 'sub', view: 'live-streaming' } },
@@ -294,7 +296,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
             MENU UTAMA
           </h2>
           <span className="text-xs text-slate-500 dark:text-slate-400">
-            17 Layanan Jemaat
+            {MENU_ITEMS.length} Layanan Jemaat
           </span>
         </div>
 

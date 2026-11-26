@@ -55,6 +55,7 @@ import { ServicesViews } from './views/ServicesViews';
 import { AdminDashboardView } from './views/AdminDashboardView';
 import { LiveStreamView } from './views/LiveStreamView';
 import { DaftarAnggotaView } from './views/DaftarAnggotaView';
+import { WartaKeuanganView } from './views/WartaKeuanganView';
 
 const SUBVIEW_TITLES: Record<SubView, string> = {
   renungan: 'Renungan Hari Ini',
@@ -74,6 +75,7 @@ const SUBVIEW_TITLES: Record<SubView, string> = {
   'admin-aspirasi': 'Dashboard Admin Aspirasi',
   'live-streaming': 'Live Streaming Ibadah',
   'daftar-anggota': 'Daftar Anggota Wijk',
+  'warta-keuangan': 'Warta Keuangan Wijk',
 };
 
 export default function App() {
@@ -438,6 +440,8 @@ export default function App() {
             onOpenAdminLogin={() => navigate({ type: 'sub', view: 'admin-aspirasi' })}
           />
         );
+      case 'warta-keuangan':
+        return <WartaKeuanganView />;
       case 'cari-gereja':
         return <CariGerejaView />;
       case 'game':

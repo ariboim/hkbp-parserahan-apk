@@ -17,7 +17,8 @@ export type SubView =
   | 'aspirasi'
   | 'admin-aspirasi'
   | 'live-streaming'
-  | 'daftar-anggota';
+  | 'daftar-anggota'
+  | 'warta-keuangan';
 
 export type ActiveRoute =
   | { type: 'tab'; tab: MainTab }
@@ -226,5 +227,35 @@ export interface WijkMemberRecord extends WijkMemberInput {
   id: string;
   createdAtMs: number;
   updatedAtMs: number;
+}
+
+export type WartaKeuanganCategory =
+  | 'Persembahan & Kolekte'
+  | 'Ucapan Syukur / Hamauliateon'
+  | 'Toktok Ripe / Iuran Wijk'
+  | 'Diakonia & Sosial'
+  | 'Operasional & Pelayanan'
+  | 'Setoran Huria / Pusat';
+
+export interface WartaKeuanganEntry {
+  id: string;
+  date: string;
+  category: WartaKeuanganCategory;
+  description: string;
+  type: 'masuk' | 'keluar';
+  amount: number;
+  notes?: string;
+}
+
+export interface WartaKeuanganReport {
+  id: string;
+  isSample: boolean;
+  sampleLabel: string;
+  periodLabel: string;
+  dateRange: string;
+  openingBalance: number;
+  chairName: string;
+  treasurerName: string;
+  entries: WartaKeuanganEntry[];
 }
 
