@@ -15,6 +15,7 @@ import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { ASSETS } from '../data/mockData';
 import { AspirationRecord, SubView, UserProfile } from '../types';
 import { ImageWithFallback } from '../components/ImageWithFallback';
+import { ChurchLogo } from '../components/ChurchLogo';
 import { ASPIRATION_LIMITS, auth, db, handleFirestoreError, OperationType } from '../firebase';
 
 interface ServicesViewsProps {
@@ -172,36 +173,145 @@ export const ServicesViews: React.FC<ServicesViewsProps> = ({
   }
 
   if (view === 'organisasi') {
-    const groups = [
-      { name: 'Ketua Wijk / Pengurus Utama', lead: 'Roberth Simatupang (Admin Utama)', schedule: 'Koordinasi Rutin Wijk Parserahan', members: 'Admin Utama (Ketua)' },
-      { name: 'Punguan Ina & Parompuan', lead: 'Ny. St. Siregar br. Hutabarat', schedule: 'Jumat · 16.00 WIB', members: '84 Anggota' },
-      { name: 'Punguan Ama HKBP Jatisampurna Wijk Parserahan', lead: 'St. M. Panggabean', schedule: 'Sabtu · 19.30 WIB', members: '62 Anggota' },
-      { name: 'Naposobulung (NHKBP) & Remaja', lead: 'Kevin Sitorus', schedule: 'Sabtu · 17.00 WIB', members: '75 Pemuda' },
-      { name: 'Seksi Sekolah Minggu', lead: 'Ribka br. Simatupang', schedule: 'Minggu · 08.00 WIB', members: '110 Anak' },
+    const advisoryBoard = [
+      {
+        order: '01',
+        role: 'Pendeta Resort HKBP Jatisampurna / Dewan Penasehat Wijk Parserahan',
+        name: 'Pdt. Tony Wakson Pakpahan',
+        initials: 'TW',
+        description: 'Pendeta Resort & Penasehat Rohani Pelayanan Wijk Parserahan',
+      },
+      {
+        order: '02',
+        role: 'Dewan Pembina',
+        name: 'St. Binsar Siagian',
+        initials: 'BS',
+        description: 'Pembinaan & Pendampingan Pelayanan Sintua dan Jemaat Wijk Parserahan',
+      },
     ];
+
+    const executiveBoard = [
+      {
+        order: '03',
+        role: 'Ketua Wijk',
+        name: 'Roberth Simatupang',
+        initials: 'RS',
+        avatarUrl: ASSETS.roberthSimatupangAvatar,
+        description: 'Pimpinan & Koordinator Pelayanan Umum Wijk Parserahan',
+      },
+      {
+        order: '04',
+        role: 'Sekretaris',
+        name: 'Melati Vanny Theresia Sianturi',
+        initials: 'MV',
+        description: 'Administrasi Data Jemaat, Warta, & Surat-Menyurat Wijk',
+      },
+      {
+        order: '05',
+        role: 'Bendahara',
+        name: 'Melati Vanny Theresia Sianturi',
+        initials: 'MV',
+        description: 'Pengelolaan Keuangan & Laporan Persembahan Wijk Parserahan',
+      },
+    ];
+
     return (
-      <div className="space-y-5 pb-8">
-        <section className="rounded-3xl bg-gradient-to-br from-violet-700 to-indigo-800 text-white p-5 sm:p-6">
-          <div className="flex items-center gap-2 text-violet-100 text-xs font-semibold">
-            <Users className="w-4 h-4" />
-            <span>Struktur Dewan & Kategorial</span>
-          </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">Organisasi HKBP Jatisampurna Wijk Parserahan</h1>
-        </section>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {groups.map((g, idx) => (
-            <div key={idx} className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-xs space-y-2">
-              <div className="flex items-center justify-between gap-2">
-                <h2 className="text-base font-extrabold text-slate-900 dark:text-white">{g.name}</h2>
-                <span className="text-xs font-mono-nums font-semibold text-violet-700 dark:text-violet-300">
-                  {g.members}
-                </span>
-              </div>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">Koordinator: {g.lead}</p>
-              <p className="text-xs text-slate-500 dark:text-slate-400">Jadwal: {g.schedule}</p>
+      <div className="space-y-6 pb-8">
+        <section className="rounded-3xl bg-gradient-to-br from-[#081C54] via-[#0F3184] to-[#1565C0] text-white p-5 sm:p-6 shadow-md flex items-center gap-4">
+          <ChurchLogo size="md" />
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 text-blue-100 text-xs font-semibold">
+              <Users className="w-4 h-4 text-amber-300 shrink-0" />
+              <span>Struktur Organisasi Resmi</span>
             </div>
-          ))}
-        </div>
+            <h1 className="text-xl sm:text-2xl font-extrabold mt-1 leading-snug">
+              Organisasi HKBP Jatisampurna Wijk Parserahan
+            </h1>
+            <p className="text-xs text-blue-100/90 mt-1">
+              Ressort Jatisampurna · Distrik XIX Bekasi
+            </p>
+          </div>
+        </section>
+
+        {/* Tier 1: Penasehat & Dewan Pembina */}
+        <section className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="text-sm font-extrabold tracking-wide text-slate-900 dark:text-white">
+              Dewan Penasehat & Dewan Pembina
+            </h2>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Pimpinan Resort & Pembina
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {advisoryBoard.map((item) => (
+              <article
+                key={item.order}
+                className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex items-start gap-4"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#0F276D] text-white font-display font-extrabold text-sm flex items-center justify-center shrink-0 shadow-xs">
+                  {item.initials}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-[#0D47A1] dark:text-blue-400 leading-snug">
+                    {item.order} · {item.role}
+                  </p>
+                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white mt-1 leading-snug">
+                    {item.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Tier 2: Pengurus Inti Wijk Parserahan */}
+        <section className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <h2 className="text-sm font-extrabold tracking-wide text-slate-900 dark:text-white">
+              Pengurus Inti Wijk Parserahan
+            </h2>
+            <span className="text-xs text-slate-500 dark:text-slate-400">
+              Pelaksana Harian Wijk
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {executiveBoard.map((item) => (
+              <article
+                key={item.order}
+                className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 shadow-xs flex items-start gap-4"
+              >
+                {item.avatarUrl ? (
+                  <img
+                    src={item.avatarUrl}
+                    alt={item.name}
+                    className="w-12 h-12 rounded-2xl object-cover object-top shrink-0 border border-slate-200 dark:border-slate-700 shadow-xs"
+                  />
+                ) : (
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-[#0D47A1] dark:text-blue-300 border border-blue-200/70 dark:border-blue-800/70 font-display font-extrabold text-sm flex items-center justify-center shrink-0">
+                    {item.initials}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-[#0D47A1] dark:text-blue-400 leading-snug">
+                    {item.order} · {item.role}
+                  </p>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white mt-1 leading-snug">
+                    {item.name}
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       </div>
     );
   }

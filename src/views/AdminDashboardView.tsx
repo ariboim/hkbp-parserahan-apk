@@ -50,6 +50,7 @@ import {
   LiveMessageRecord,
 } from '../types';
 import { WijkMembersManager } from '../components/WijkMembersManager';
+import { ChurchLogo } from '../components/ChurchLogo';
 
 interface AdminDashboardViewProps {
   adminToken: string | null;
@@ -454,21 +455,24 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
     return (
       <div className="max-w-md mx-auto py-6 pb-12">
         <div className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-br from-[#0D47A1] to-[#1565C0] text-white p-6">
-            <div className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center mb-3">
-              <Lock className="w-5 h-5" />
+          <div className="bg-gradient-to-br from-[#081C54] via-[#0F3184] to-[#1565C0] text-white p-6">
+            <div className="flex items-center gap-4">
+              <ChurchLogo size="md" />
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-amber-300 flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 shrink-0" />
+                  <span>Akses Terbatas · Admin Utama (Ketua)</span>
+                </p>
+                <h1 className="text-xl font-extrabold mt-1">
+                  {serverMode === 'setup'
+                    ? 'Aktivasi Dashboard Admin'
+                    : 'Masuk Dashboard Admin'}
+                </h1>
+                <p className="text-xs text-blue-100/90 mt-0.5">
+                  HKBP Jatisampurna Wijk Parserahan
+                </p>
+              </div>
             </div>
-            <p className="text-xs font-semibold text-blue-100">
-              Akses Terbatas · Admin Utama (Ketua)
-            </p>
-            <h1 className="text-xl font-extrabold mt-1">
-              {serverMode === 'setup'
-                ? 'Aktivasi Dashboard Admin'
-                : 'Masuk Dashboard Admin'}
-            </h1>
-            <p className="text-xs text-blue-100/90 mt-1">
-              HKBP Jatisampurna Wijk Parserahan
-            </p>
           </div>
 
           <form onSubmit={handleServerAuthSubmit} className="p-6 space-y-4">
@@ -565,18 +569,21 @@ export const AdminDashboardView: React.FC<AdminDashboardViewProps> = ({
   return (
     <div className="space-y-6 pb-8">
       {/* Admin Top Header */}
-      <section className="rounded-3xl bg-gradient-to-br from-[#0D47A1] to-[#1565C0] text-white p-5 sm:p-6 shadow-sm flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 text-blue-100 text-xs font-semibold">
-            <ShieldCheck className="w-4 h-4 text-amber-300" />
-            <span>Dashboard Admin Utama · {adminUsername || 'Ketua'}</span>
+      <section className="rounded-3xl bg-gradient-to-br from-[#081C54] via-[#0F3184] to-[#1565C0] text-white p-5 sm:p-6 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-4 min-w-0">
+          <ChurchLogo size="md" />
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 text-blue-100 text-xs font-semibold">
+              <ShieldCheck className="w-4 h-4 text-amber-300 shrink-0" />
+              <span>Dashboard Admin Utama · {adminUsername || 'Ketua'}</span>
+            </div>
+            <h1 className="text-xl sm:text-2xl font-extrabold mt-1">
+              Pemantauan Kotak Aspirasi Jemaat
+            </h1>
+            <p className="text-xs text-blue-100/90 mt-1">
+              HKBP Jatisampurna Wijk Parserahan · Tersinkronisasi Real-Time ke Firestore
+            </p>
           </div>
-          <h1 className="text-xl sm:text-2xl font-extrabold mt-1">
-            Pemantauan Kotak Aspirasi Jemaat
-          </h1>
-          <p className="text-xs text-blue-100/90 mt-1">
-            HKBP Jatisampurna Wijk Parserahan · Tersinkronisasi Real-Time ke Firestore
-          </p>
         </div>
 
         <button

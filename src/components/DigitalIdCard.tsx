@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Check, Copy, Download, Maximize2, ShieldCheck, X } from 'lucide-react';
 import { CardTheme, UserProfile } from '../types';
+import { ChurchLogo } from './ChurchLogo';
 
 interface DigitalIdCardProps {
   profile: UserProfile;
@@ -150,8 +151,8 @@ export const DigitalIdCard: React.FC<DigitalIdCardProps> = ({
       {/* Membership Card */}
       <div className={`relative overflow-hidden rounded-3xl p-5 sm:p-6 shadow-lg transition-colors duration-200 ${style.wrapper}`}>
         {/* Top Crest Header */}
-        <div className={`flex items-start justify-between gap-3 pb-4 border-b ${style.divider}`}>
-          <div>
+        <div className={`flex items-center justify-between gap-3 pb-4 border-b ${style.divider}`}>
+          <div className="min-w-0">
             <p className="text-[11px] font-bold tracking-wider opacity-90">
               HURIA KRISTEN BATAK PROTESTAN
             </p>
@@ -159,9 +160,7 @@ export const DigitalIdCard: React.FC<DigitalIdCardProps> = ({
               Kartu Identitas Digital · HKBP Jatisampurna Wijk Parserahan
             </p>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-white/15 flex items-center justify-center shrink-0 font-display font-extrabold text-sm">
-            ✝
-          </div>
+          <ChurchLogo size="sm" />
         </div>
 
         {/* Identity Body + QR */}

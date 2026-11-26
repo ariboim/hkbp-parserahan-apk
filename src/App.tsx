@@ -39,6 +39,7 @@ import { NotificationDrawer } from './components/NotificationDrawer';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { MiniPlayerBar } from './components/MiniPlayerBar';
 import { BetaWelcomeGate } from './components/BetaWelcomeGate';
+import { ChurchLogo } from './components/ChurchLogo';
 import { HomeView } from './views/HomeView';
 import { AlkitabView } from './views/AlkitabView';
 import { TimelineView } from './views/TimelineView';
@@ -477,9 +478,7 @@ export default function App() {
             onClick={() => navigate({ type: 'tab', tab: 'beranda' })}
             className="flex items-center gap-3 text-left w-full"
           >
-            <div className="w-10 h-10 rounded-xl bg-[#0D47A1] text-white font-display font-extrabold flex items-center justify-center shrink-0">
-              ✝
-            </div>
+            <ChurchLogo size="sm" />
             <div className="min-w-0">
               <span className="block text-sm font-extrabold text-slate-900 dark:text-white leading-tight">
                 HKBP Jatisampurna Wijk Parserahan

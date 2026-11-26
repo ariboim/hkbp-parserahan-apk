@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight, MessageSquareHeart, ShieldAlert } from 'lucide-react';
+import { ChurchLogo } from './ChurchLogo';
 
 interface BetaWelcomeGateProps {
   onContinue: () => void;
@@ -14,12 +15,10 @@ export const BetaWelcomeGate: React.FC<BetaWelcomeGateProps> = ({
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-lg rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
         {/* Top Church Banner */}
-        <div className="bg-gradient-to-br from-[#0D47A1] via-[#1565C0] to-[#0B3B8C] text-white p-6 sm:p-7">
-          <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center font-display font-extrabold text-xl shrink-0">
-              ✝
-            </div>
-            <div>
+        <div className="bg-gradient-to-br from-[#081C54] via-[#0F2E80] to-[#1565C0] text-white p-6 sm:p-7">
+          <div className="flex items-center gap-4">
+            <ChurchLogo size="lg" />
+            <div className="min-w-0">
               <p className="text-xs font-semibold text-amber-300">
                 Pratinjau Publik · Versi Beta
               </p>

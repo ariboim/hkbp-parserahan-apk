@@ -34,6 +34,7 @@ import {
 } from '../firebase';
 import { LiveMessageRecord, LiveStreamConfig, UserProfile } from '../types';
 import { ImageWithFallback } from '../components/ImageWithFallback';
+import { ChurchLogo } from '../components/ChurchLogo';
 
 interface LiveStreamViewProps {
   profile: UserProfile;
@@ -240,7 +241,7 @@ export const LiveStreamView: React.FC<LiveStreamViewProps> = ({
   return (
     <div className="space-y-6 pb-8">
       {/* Live Stream Hero Banner */}
-      <section className="rounded-3xl bg-gradient-to-br from-[#0D47A1] via-[#1565C0] to-[#0B3B8C] text-white p-5 sm:p-6 shadow-md">
+      <section className="rounded-3xl bg-gradient-to-br from-[#081C54] via-[#0F3184] to-[#1565C0] text-white p-5 sm:p-6 shadow-md">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             {liveConfig.isLive ? (
@@ -278,13 +279,18 @@ export const LiveStreamView: React.FC<LiveStreamViewProps> = ({
           </button>
         </div>
 
-        <h1 className="text-xl sm:text-2xl font-extrabold mt-3 leading-snug">
-          {loadingConfig ? 'Memuat informasi siaran...' : liveConfig.title}
-        </h1>
-        <p className="text-xs sm:text-sm text-blue-100 mt-1 flex items-center gap-1.5">
-          <UserCheck className="w-4 h-4 shrink-0 text-amber-300" />
-          <span>{liveConfig.speaker}</span>
-        </p>
+        <div className="mt-4 flex items-center gap-4">
+          <ChurchLogo size="md" />
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-extrabold leading-snug">
+              {loadingConfig ? 'Memuat informasi siaran...' : liveConfig.title}
+            </h1>
+            <p className="text-xs sm:text-sm text-blue-100 mt-1 flex items-center gap-1.5">
+              <UserCheck className="w-4 h-4 shrink-0 text-amber-300" />
+              <span>{liveConfig.speaker}</span>
+            </p>
+          </div>
+        </div>
 
         {/* Automatic Timezone Conversion Card */}
         <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5">

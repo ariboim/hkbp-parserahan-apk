@@ -32,6 +32,7 @@ import {
 } from '../types';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import { PWAInstallButton } from '../components/PWAInstallButton';
+import { ChurchLogo } from '../components/ChurchLogo';
 
 interface HomeViewProps {
   profile: UserProfile;
@@ -84,19 +85,11 @@ export const HomeView: React.FC<HomeViewProps> = ({
   return (
     <div className="space-y-6 pb-8">
       {/* Top Hero Header */}
-      <header className="rounded-3xl bg-gradient-to-br from-[#0D47A1] via-[#1565C0] to-[#0B3B8C] text-white p-5 sm:p-6 shadow-md">
-        <div className="flex items-center justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-xs font-medium text-blue-100">
-              Horas, {profile.name.split(' ')[0]} · {profile.role}
-            </p>
-            <h1 className="text-lg sm:text-2xl font-extrabold tracking-tight leading-snug mt-0.5">
-              HKBP Jatisampurna Wijk Parserahan
-            </h1>
-            <p className="text-xs text-blue-100/90 mt-0.5 leading-snug">
-              Ressort Jatisampurna · Distrik XIX Bekasi
-            </p>
-          </div>
+      <header className="rounded-3xl bg-gradient-to-br from-[#081C54] via-[#0F3184] to-[#1565C0] text-white p-5 sm:p-6 shadow-md">
+        <div className="flex items-center justify-between gap-3 pb-4 border-b border-white/15">
+          <p className="text-xs font-medium text-blue-100 truncate">
+            Horas, {profile.name.split(' ')[0]} · {profile.role}
+          </p>
 
           <div className="flex items-center gap-2 shrink-0">
             <div className="hidden sm:block">
@@ -135,6 +128,21 @@ export const HomeView: React.FC<HomeViewProps> = ({
                 profile.initials
               )}
             </button>
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center gap-4 sm:gap-5">
+          <ChurchLogo size="lg" />
+          <div className="min-w-0 flex-1">
+            <p className="text-[11px] font-bold tracking-wider text-amber-300">
+              HURIA KRISTEN BATAK PROTESTAN
+            </p>
+            <h1 className="text-lg sm:text-2xl font-extrabold tracking-tight leading-snug mt-0.5 text-balance">
+              HKBP Jatisampurna Wijk Parserahan
+            </h1>
+            <p className="text-xs text-blue-100/90 mt-1 leading-snug">
+              Ressort Jatisampurna · Distrik XIX Bekasi
+            </p>
           </div>
         </div>
 
@@ -316,12 +324,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
 
       {/* HKBP Jatisampurna Wijk Parserahan Church Info Card */}
       <section className="rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs grid grid-cols-1 md:grid-cols-12">
-        <div className="md:col-span-5 h-44 md:h-auto overflow-hidden">
+        <div className="relative md:col-span-5 h-44 md:h-auto overflow-hidden">
           <ImageWithFallback
             src={ASSETS.churchParserahanHero}
             alt="Gedung Gereja HKBP Jatisampurna Wijk Parserahan"
             className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute bottom-3 left-3">
+            <ChurchLogo size="sm" />
+          </div>
         </div>
         <div className="md:col-span-7 p-5 sm:p-6 flex flex-col justify-between gap-4">
           <div>

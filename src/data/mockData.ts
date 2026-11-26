@@ -17,6 +17,7 @@ export const ASSETS = {
   hkbpTvStudio: '/src/assets/images/hkbp_tv_studio_1795591256014.jpg',
   churchParserahanHero: '/src/assets/images/church_parserahan_hero_1795591255659.jpg',
   roberthSimatupangAvatar: '/assets/aistudio/IMG_20261125_180232_4235f81b.jpg',
+  churchLogo: '/assets/aistudio/logopaserahan_873b14d8',
 };
 
 export const DEMO_PROFILES: Record<'jemaat' | 'admin', UserProfile> = {
@@ -663,7 +664,7 @@ export const CHURCH_LOCATIONS: ChurchLocation[] = [
     ressort: 'Ressort Jatisampurna',
     distrik: 'Distrik XIX Bekasi',
     address: 'Jl. Raya Jatisampurna, Kec. Jatisampurna, Kota Bekasi',
-    pastor: 'Ketua Wijk: Roberth Simatupang',
+    pastor: 'Pdt. Tony Wakson Pakpahan · Ketua Wijk: Roberth Simatupang',
     distanceKm: 0.4,
     schedules: ['Minggu Pagi (B. Indonesia): 07.30 WIB', 'Minggu Siang (B. Batak): 10.00 WIB', 'Sekolah Minggu: 08.00 WIB'],
     phone: '+62 812-6401-7712',
